@@ -46,7 +46,7 @@ function ListBox({
     const [sortBy, setSortBy] = useReducer<SortOption, [SortOption]>((_, newState) => {
         shouldAnimateCards.current = false;
         return newState;
-    }, '');
+    }, 'open');
 
     const filteredLocations = useFilteredLocations({
         locations,

@@ -15,7 +15,7 @@ function SelectLocation({ setLocationFilterQuery, locations }: SelectLocationPro
         return (
             <select className={css.select}>
                 {/* Keep label the same as the default option below to reduce loading jank */}
-                <option value="" label="Filter by Building" />
+                <option value="" label="All Buildings" />
             </select>
         );
     }
@@ -27,7 +27,7 @@ function SelectLocation({ setLocationFilterQuery, locations }: SelectLocationPro
 
     return (
         <select onChange={(e) => setLocationFilterQuery(e.target.value)} className={css.select}>
-            <option value="" key="Filter by Building" label="Filter by Building" />
+            <option value="" key="All Buildings" label="All Buildings" />
             {dedeupedLocationStrings.map((location) => (
                 <option key={location} value={location}>
                     {location}

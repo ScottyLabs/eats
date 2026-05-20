@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import { ILocation_Full, LocationState } from '../types/locationTypes';
 import assert from './assert';
 
-export type SortOption = '' | 'distance';
+export type SortOption = 'open' | 'distance' | 'ra-highest-open' | 'ra-highest' | 'ra-lowest';
 
 const FUSE_OPTIONS: IFuseOptions<ILocation_Full> = {
     // keys to perform the search on
@@ -83,6 +83,28 @@ export function useSortedLocations({
             const stateComparison = location1.locationState - location2.locationState;
             if (stateComparison !== 0) return stateComparison;
             return compareLocationsByDistanceWithinState(location1, location2);
+        });
+    }
+    if (sortBy === 'ra-highest-open' || sortBy === 'ra-highest' || sortBy === 'ra-lowest') {
+        return [...locations].sort((location1, location2) => {
+            const o1 =
+                location1.locationState === LocationState.OPEN || location1.locationState === LocationState.CLOSES_SOON;
+            const o2 =
+                location2.locationState === LocationState.OPEN || location2.locationState === LocationState.CLOSES_SOON;
+
+            if (sortBy === 'ra-highest-open' && o1 !== o2) {
+                return location1.locationState - location2.locationState;
+            }
+
+            const r1 = location1.ratingsAvg ?? null;
+            const r2 = location2.ratingsAvg ?? null;
+
+            if (r1 === null && r2 === null) return compareLocations(location1, location2);
+            if (r1 === null) return 1;
+            if (r2 === null) return -1;
+            if (r1 === r2) return compareLocations(location1, location2);
+
+            return sortBy === 'ra-lowest' ? r1 - r2 : r2 - r1;
         });
     }
     return [...locations].sort(compareLocations); // we make a copy to avoid mutating the original array
