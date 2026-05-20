@@ -60,6 +60,7 @@
         font-size: 30px;
     }
 }
+
 @keyframes slide-in {
     0% {
         opacity: 0;
@@ -77,7 +78,7 @@
     }
 }
 
-.list-header button {
+.list-header > button {
     background-color: transparent;
     border: 2px solid var(--black-900);
     padding: 10px 20px;

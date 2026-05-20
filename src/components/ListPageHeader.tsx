@@ -47,7 +47,7 @@ export default function ListPageHeader() {
                 {theme === 'april-fools' ? (
                     <AprilFools />
                 ) : (
-                    <>
+                    <div className={css['list-header__greeting']}>
                         <span className={css['list-header__greeting--desktop']}>
                             {userLoggedInData?.user?.firstName && `Hi ${userLoggedInData?.user?.firstName}! `}
                             {desktopGreeting}
@@ -57,7 +57,7 @@ export default function ListPageHeader() {
                             {userLoggedInData?.user?.firstName && `Hi ${userLoggedInData?.user?.firstName}! `}
                             {mobileGreeting}
                         </span>
-                    </>
+                    </div>
                 )}
             </h3>
             {error !== null ? (

@@ -22,7 +22,7 @@
 .list-controls-container {
     position: sticky;
     top: -10px;
-    z-index: 800;
+    z-index: 727;
     background-color: var(--black-950);
     margin-bottom: 10px;
 }
@@ -30,14 +30,17 @@
     margin-left: auto;
     padding: 27px var(--global-x-padding) 15px;
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 42px 42px;
-    max-width: 550px;
+    grid-template-columns: minmax(0, 1fr) 190px 170px;
+    max-width: 730px;
     gap: 0.6rem;
     align-items: center;
 
     @container (width<1000px) {
         max-width: initial;
         padding: 20px var(--global-x-padding) 10px;
+    }
+    @container (width<=600px) {
+        grid-template-columns: 1fr;
     }
 }
 

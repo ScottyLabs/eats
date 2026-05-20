@@ -2,19 +2,21 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import { useEffect, useLayoutEffect, useReducer, useRef } from 'react';
 
-import SortSelect, { SelectSort as SelectSortType } from '../components/SelectSort';
 import { ILocation_Full } from '../types/locationTypes';
 import SelectLocation from '../components/SelectLocation';
+import SelectSort from '../components/SelectSort';
 import SearchBar from '../components/SearchBar';
 import mikuBgUrl from '../assets/miku/miku.jpg';
 import EateryCardGrid from '../components/EateryCardGrid';
 import Drawer from '../components/Drawer';
 import { DrawerAPIContextProvider, useDrawerAPIContext } from '../contexts/DrawerAPIContext';
-import { useFilteredLocations } from '../util/useFilteredLocations';
+import { type SortOption, useFilteredLocations, useSortedLocations } from '../util/useFilteredLocations';
 import './ListPage.css';
 import { CardViewPreference } from '../util/storage';
 import Footer from '../components/Footer';
 import ListPageHeader from '../components/ListPageHeader';
+import { useIsMobileContext } from '../contexts/IsMobileContext';
+import { useUserLocation } from '../contexts/UserLocationContext';
 
 function ListBox({
     locations,
@@ -25,8 +27,10 @@ function ListBox({
     error: boolean;
     updateCardViewPreference: (id: string, newStatus: CardViewPreference) => void;
 }) {
+    const { requestUserCoordinates } = useUserLocation();
     const shouldAnimateCards = useRef(true);
     const { closeDrawer } = useDrawerAPIContext();
+    const isMobile = useIsMobileContext();
 
     // permanently cut out animation when user filters cards,
     // so we don't end up with some cards (but not others)
@@ -39,18 +43,17 @@ function ListBox({
         shouldAnimateCards.current = false;
         return newState;
     }, '');
-
-    const [sortQuery, setSortOption] = useReducer<SelectSortType, [SelectSortType]>((_, newState) => {
+    const [sortBy, setSortBy] = useReducer<SortOption, [SortOption]>((_, newState) => {
         shouldAnimateCards.current = false;
         return newState;
-    }, 'time');
+    }, '');
 
     const filteredLocations = useFilteredLocations({
         locations,
         searchQuery,
         locationFilterQuery,
     });
-
+    const sortedLocations = useSortedLocations({ locations: filteredLocations, sortBy });
     // Load query from URL
     useLayoutEffect(() => {
         const urlQuery = new URLSearchParams(window.location.search).get('search');
@@ -66,24 +69,24 @@ function ListBox({
             }}
         >
             <ListPageHeader />
-            <div
-                className="list-controls-container"
-                onClick={(ev) => {
-                    ev.stopPropagation();
-                }}
-            >
+            <div className="list-controls-container" onClick={(ev) => ev.preventDefault()}>
                 <div className="list-controls-layout">
                     <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-                    <SelectLocation {...{ setLocationFilterQuery, locations }} />
-                    <SortSelect sortOption={sortQuery} setSortOption={setSortOption} />
+                    {!isMobile && <SelectLocation {...{ setLocationFilterQuery, locations }} />}
+                    <SelectSort
+                        sortBy={sortBy}
+                        setSortBy={(newSortBy) => {
+                            setSortBy(newSortBy);
+                            if (newSortBy === 'distance') requestUserCoordinates();
+                        }}
+                    />
                 </div>
             </div>
             <EateryCardGrid
-                locations={filteredLocations}
+                locations={sortedLocations}
                 shouldAnimateCards={shouldAnimateCards.current}
                 apiError={error}
                 setSearchQuery={setSearchQuery}
-                sortOption={sortQuery}
                 updateCardViewPreference={(id, preference) => {
                     shouldAnimateCards.current = false;
                     updateCardViewPreference(id, preference);

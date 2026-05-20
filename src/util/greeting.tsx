@@ -61,7 +61,6 @@ const getRandomStringFrom = (greetings: string[]) => {
 };
 const getGreeting = (hours: number, special?: Special): ReactNode => {
     assert(bounded(hours, 0, 24));
-
     if (special?.isMikuDay)
         return (
             <>
