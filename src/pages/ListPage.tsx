@@ -15,7 +15,6 @@ import './ListPage.css';
 import { CardViewPreference } from '../util/storage';
 import Footer from '../components/Footer';
 import ListPageHeader from '../components/ListPageHeader';
-import { useIsMobileContext } from '../contexts/IsMobileContext';
 import { useUserLocation } from '../contexts/UserLocationContext';
 
 function ListBox({
@@ -30,7 +29,6 @@ function ListBox({
     const { requestUserCoordinates } = useUserLocation();
     const shouldAnimateCards = useRef(true);
     const { closeDrawer } = useDrawerAPIContext();
-    const isMobile = useIsMobileContext();
 
     // permanently cut out animation when user filters cards,
     // so we don't end up with some cards (but not others)
@@ -72,7 +70,7 @@ function ListBox({
             <div className="list-controls-container" onClick={(ev) => ev.preventDefault()}>
                 <div className="list-controls-layout">
                     <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-                    {!isMobile && <SelectLocation {...{ setLocationFilterQuery, locations }} />}
+                    <SelectLocation {...{ setLocationFilterQuery, locations }} />
                     <SelectSort
                         sortBy={sortBy}
                         setSortBy={(newSortBy) => {

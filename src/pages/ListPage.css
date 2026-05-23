@@ -39,6 +39,13 @@
         padding: 20px var(--global-x-padding) 10px;
     }
     @container (width<=600px) {
+        width: 100%;
+        margin-left: 0;
+        box-sizing: border-box;
+
+        & > :first-child {
+            flex: 1;
+        }
     }
 }
 
