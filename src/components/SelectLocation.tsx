@@ -1,3 +1,5 @@
+import { useRef } from 'react';
+import { Filter } from 'lucide-react';
 import { ILocation_Full } from '../types/locationTypes';
 import css from './SelectLocation.module.css';
 
@@ -11,29 +13,36 @@ function getPrimaryLocation(locationString: string) {
 }
 
 function SelectLocation({ setLocationFilterQuery, locations }: SelectLocationProps) {
-    if (locations === undefined) {
-        return (
-            <select className={css.select}>
-                {/* Keep label the same as the default option below to reduce loading jank */}
-                <option value="" label="All Buildings" />
-            </select>
-        );
-    }
+    const selectRef = useRef<HTMLSelectElement>(null);
 
-    let locationStrings = locations.map((locationObj) => locationObj.location);
-    locationStrings = locations.map((locationObj) => getPrimaryLocation(locationObj.location));
+    const handleClick = () => {
+        const select = selectRef.current;
+        if (!select) return;
+        if (typeof select.showPicker === 'function') {
+            select.showPicker();
+        } else {
+            select.click();
+        }
+    };
 
-    const dedeupedLocationStrings = [...new Set(locationStrings)];
+    const dedeupedLocationStrings = locations
+        ? [...new Set(locations.map((loc) => getPrimaryLocation(loc.location)))]
+        : [];
 
     return (
-        <select onChange={(e) => setLocationFilterQuery(e.target.value)} className={css.select}>
-            <option value="" key="All Buildings" label="All Buildings" />
-            {dedeupedLocationStrings.map((location) => (
-                <option key={location} value={location}>
-                    {location}
-                </option>
-            ))}
-        </select>
+        <div className={css.container}>
+            <button className={css.button} onClick={handleClick}>
+                <Filter />
+            </button>
+            <select ref={selectRef} onChange={(e) => setLocationFilterQuery(e.target.value)} className={css.select}>
+                <option value="" key="All Buildings" label="All Buildings" />
+                {dedeupedLocationStrings.map((location) => (
+                    <option key={location} value={location}>
+                        {location}
+                    </option>
+                ))}
+            </select>
+        </div>
     );
 }
 

@@ -29,9 +29,8 @@
 .list-controls-layout {
     margin-left: auto;
     padding: 27px var(--global-x-padding) 15px;
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) 190px 170px;
-    max-width: 730px;
+    display: flex;
+    width: fit-content;
     gap: 0.6rem;
     align-items: center;
 
@@ -40,7 +39,6 @@
         padding: 20px var(--global-x-padding) 10px;
     }
     @container (width<=600px) {
-        grid-template-columns: 1fr;
     }
 }
 
