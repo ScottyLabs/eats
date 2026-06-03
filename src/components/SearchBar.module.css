@@ -1,7 +1,7 @@
 .locations-search-wrapper {
     display: block;
     position: relative;
-    min-width: 280px;
+    flex-basis: 280px;
 }
 
 .locations-search {
