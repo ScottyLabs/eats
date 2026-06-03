@@ -1,6 +1,6 @@
 # CMUEats
 
-<img width="534" alt="image" src="https://github.com/user-attachments/assets/dc64d12e-bfb5-4d0d-8d79-6fc2d2a265b8" />
+<img width="316"  alt="image" src="https://github.com/user-attachments/assets/e9b9b726-223c-4a3d-b46c-b4c6121c52b9" />
 
 Visit the site [here](http://cmueats.com/).
 Visit the staging website [here](http://staging.cmueats.com/).
