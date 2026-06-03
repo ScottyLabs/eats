@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { Filter } from 'lucide-react';
 import { ILocation_Full } from '../types/locationTypes';
-import css from './SelectLocation.module.css';
+import css from './SelectDropdown.module.css';
 
 type SelectLocationProps = {
     setLocationFilterQuery: React.Dispatch<string>;
@@ -25,7 +25,7 @@ function SelectLocation({ setLocationFilterQuery, locations }: SelectLocationPro
         }
     };
 
-    const dedeupedLocationStrings = locations
+    const deduplicatedLocations = locations
         ? [...new Set(locations.map((loc) => getPrimaryLocation(loc.location)))]
         : [];
 
@@ -36,7 +36,7 @@ function SelectLocation({ setLocationFilterQuery, locations }: SelectLocationPro
             </button>
             <select ref={selectRef} onChange={(e) => setLocationFilterQuery(e.target.value)} className={css.select}>
                 <option value="" key="All Buildings" label="All Buildings" />
-                {dedeupedLocationStrings.map((location) => (
+                {deduplicatedLocations.map((location) => (
                     <option key={location} value={location}>
                         {location}
                     </option>

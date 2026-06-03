@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import { SortDesc } from 'lucide-react';
-import css from './SelectSort.module.css';
+import css from './SelectDropdown.module.css';
 import type { SortOption } from '../util/useFilteredLocations';
 
 type SelectSortProps = {

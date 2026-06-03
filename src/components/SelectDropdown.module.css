@@ -1,11 +1,11 @@
 .container {
     position: relative;
+    aspect-ratio: 1/1;
 }
 
 .button {
-    cursor: pionter;
-    width: 42px;
-    height: 42px;
+    height: 100%;
+    width: 100%;
     border-radius: 14px;
     border: 1px solid transparent;
     background: var(--input-bg);
