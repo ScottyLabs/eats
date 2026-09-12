@@ -1,68 +1,30 @@
-# Dining API
+# CMUEats™
 
-Visit the api [here](https://api.cmueats.com/).
-Visit the staging api [here](https://api.staging.cmueats.com/).
+This is the monorepo for CMUEats™, an app that keep track of the statuses of various dining locations across the Pittsburgh campus of Carnegie Mellon University.
 
-Welcome! We're excited to have you join CMU Eats! (alternatively spelled cmueats). Documentation can be found on our [Notion page](https://app.notion.com/p/wiki-scottylabs/CMU-Eats-27496192554c80faa3fdce530494bb77). All communication will happen on the ScottyLabs Slack under the cmueats channel.
+Visit the site at [https://cmueats.com], and the staging version at [https://staging.cmueats.com].
 
-This Dining API scrapes location data from the CMU dining sites and distributes it as a RESTful API.
+Visit the api at [https://api.cmueats.com/], and the staging version at [https://api.staging.cmueats.com/].
 
-To build and deploy the service, you'll need [pnpm](https://pnpm.io/),
-which you should install beforehand.
+## Monorepo
 
-Then, clone this repository to your computer by running
+This monorepo consists of two projects: the frontend and a backend named *Dining API*, all written in TypeScript and managed by [pnpm](https://pnpm.io/).
 
-```
-git clone https://github.com/ScottyLabs/dining-api.git
-```
-
-after making sure you have [git](https://git-scm.com/downloads) downloaded or running
-
-```
-gh repo clone ScottyLabs/dining-api
-```
-
-if you have the [Github CLI](https://cli.github.com/).
-
-If you already have the node_modules folder or package-lock.json from previous versions of the Dining API, please remove them before continuing.
-
-Now install the API's dependencies by 'cd'-ing into the root of the repository and running:
-
-```
+Install packages using
+```sh
 pnpm install
 ```
 
-Then start your local database with (assuming you have the correct env variables)
+## Other Documentations
 
-```bash
-pnpm db:start
-pnpm db:push # if this is your first time running the db
-pnpm dev
-```
+Other important documentations about CMUEats are written in markdown and located at `./docs`.
 
-To see the contents of the database, I recommend using DBeaver. You can also run `pnpm db:studio` to start up drizzle studio
-
-## Database schema changes (important!)
-
-When you make changes to the database schema, be sure to run `pnpm db:push` to keep your local db in sync.
-
-Before merging your PR, be sure to run `pnpm db:generate` to generate a migration file, which will then be automatically applied to the staging and production databases when deployed. (You should do this before running tests as well!)
-
-To test if the migration files work, you can run `pnpm run-prod`, which will spin up a production version of the server and a postgres database mounted on a new volume. The server is created using the same Dockerfile used in our Railway deployments, so if it works locally, it (probably) works in production as well.
-
-## Extra docker commands
-
-Run bash inside it (for debugging): `docker run --rm -it --entrypoint bash  dining-api-server`
-Close dockerfile + delete volumes: `docker-compose down --volumes`
-
-## Under the hood
-
-We get the entire list of locations from `DINING_URL`, fetch location specifics under their corresponding `CONCEPT_BASE_LINK`, and retrieve soups and specials from `DINING_SOUPS_URL` and `DINING_SPECIALS_URL`, respectively. See the `process()` method in `diningParser.ts` for more details.
-
-## Before submitting a PR
-
-- Make sure all tests pass with `pnpm test` or `pnpm test --watch` for watch mode.
-
-## Random notes
-
-the "cheerio" package is pinned at version "1.0.0-rc.12" because newer versions seem to be incompatible with jest.
+TODO:
+important items to be documented:
+1. testing
+1. monorepo
+1. backend (rating system?)
+1. db management
+1. deploying
+1. frontend code structure
+1. everything else on notion

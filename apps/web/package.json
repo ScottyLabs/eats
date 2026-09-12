@@ -1,6 +1,7 @@
 {
-  "name": "cmueats",
+  "name": "@cmueats/web",
   "version": "0.1.0",
+  "description": "CMUEats web frontend",
   "private": true,
   "type": "module",
   "scripts": {
@@ -12,8 +13,8 @@
     "eject": "vite eject",
     "lint": "oxlint src",
     "lint:fix": "oxlint src --fix",
-    "format": "oxfmt --write src",
-    "format:check": "oxfmt --check src",
+    "format": "oxfmt --check src",
+    "format:fix": "oxfmt --write src",
     "coverage": "pnpm vitest --coverage",
     "api-update": "pnpm openapi-typescript api.yaml -o src/types/api.d.ts"
   },
@@ -92,6 +93,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "packageManager": "pnpm@10.18.0"
+  }
 }

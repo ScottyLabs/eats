@@ -1,12 +1,19 @@
 node_modules/
-yarn.lock
-.env
 .vscode
 result.json
-package-lock.json
-.venv
 *.log
-__pycache__
 dist/
+build/
+
+# misc
 .DS_Store
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.vscode
 coverage
+
+# for testing only
+/public/example-response.json
