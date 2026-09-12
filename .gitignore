@@ -1,0 +1,12 @@
+node_modules/
+yarn.lock
+.env
+.vscode
+result.json
+package-lock.json
+.venv
+*.log
+__pycache__
+dist/
+.DS_Store
+coverage
