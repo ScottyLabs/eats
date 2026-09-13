@@ -11,6 +11,9 @@
     "rootDir": ".",
     "outDir": "./dist",
     "moduleResolution": "bundler",
+    "paths": {
+      "*": ["./src/*"]
+    },
     // "allowImportingTsExtensions": true,
     // "resolveJsonModule": true,
     "isolatedModules": true,

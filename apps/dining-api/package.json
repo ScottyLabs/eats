@@ -69,9 +69,6 @@
     "tsx": "^4.20.3",
     "vitest": "^4.0.8"
   },
-  "peerDependencies": {
-    "typescript": "^5.8.3"
-  },
   "type": "module",
   "exports": "./server.js"
 }
