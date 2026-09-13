@@ -166,11 +166,11 @@ function EateryCardHeader({
         <>
             <div
                 className={css['card-header-container']}
-                style={{ '--status-color': highlightColors[location.locationState] } as React.CSSProperties}
+                style={{ '--status-color': highlightColors[location.locationState] }}
             >
                 <div
                     className={clsx(css['card-header-dot'], statusChangesSoon && css['card-header-dot--blinking'])}
-                    style={{ '--status-color': highlightColors[location.locationState] } as React.CSSProperties}
+                    style={{ '--status-color': highlightColors[location.locationState] }}
                     ref={dotRef}
                 />
 

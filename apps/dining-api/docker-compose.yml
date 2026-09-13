@@ -19,7 +19,7 @@ services:
       retries: 10
 
   server:
-    build: 
+    build:
       dockerfile: Dockerfile
     container_name: dining-api-server
     ports:
