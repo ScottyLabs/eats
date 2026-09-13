@@ -27,6 +27,14 @@
         "useTabs": false,
         "singleQuote": false
       }
+    },
+    {
+      "files": ["*.yaml"],
+      "options": {
+        "tabWidth": 2,
+        "useTabs": false,
+        "singleQuote": false
+      }
     }
   ]
 }

@@ -11,7 +11,16 @@
     "build": "pnpm --filter @cmueats/web build && pnpm --filter @cmueats/api build",
     "build:web": "pnpm --filter @cmueats/web build",
     "build:api": "pnpm --filter @cmueats/api build",
-    "typecheck": "pnpm --filter @cmueats/web typecheck && pnpm --filter @cmueats/api typecheck"
+    "typecheck": "pnpm --filter @cmueats/web typecheck && pnpm --filter @cmueats/api typecheck",
+    "lint": "oxlint .",
+    "lint:fix": "oxlint . --fix",
+    "format": "oxfmt --check .",
+    "format:fix": "oxfmt --write ."
+  },
+  "devDependencies": {
+    "oxfmt": "^0.67.0",
+    "oxlint": "^1.82.0",
+    "oxlint-tsgolint": "^7.0.2001"
   },
   "engines": {
     "node": ">=18.0.0",

@@ -12,15 +12,16 @@
     "**/.gitattributes",
     "node_modules",
     "build",
-    "dist",
-    "src/types/api.d.ts"
+    "dist"
   ],
-  "plugins": ["typescript", "react", "import", "jsx-a11y", "vitest"],
+  "plugins": ["typescript", "import"],
+  "options": {
+    "typeAware": true
+  },
   "env": {
     "builtin": true,
     "es6": true,
     "es2026": true,
-    "browser": true,
     "node": true
   },
   "categories": {
@@ -31,7 +32,6 @@
     "style": "off"
   },
   "rules": {
-    "react/react-in-jsx-scope": "off",
     "no-console": ["warn", { "allow": ["warn"] }],
     "typescript/no-use-before-define": [
       "error",
@@ -39,9 +39,6 @@
     ],
     "no-plusplus": "off",
     "no-nested-ternary": "off",
-    "react/no-array-index-key": "off",
-    "react-hooks/rules-of-hooks": "error",
-    "react-hooks/exhaustive-deps": "error",
     "import/no-named-as-default": "off",
     "import/no-unassigned-import": "off",
     "no-unsafe-type-assertion": "off",
@@ -51,10 +48,5 @@
         "caughtErrors": "none"
       }
     ]
-  },
-  "settings": {
-    "react": {
-      "version": "19.0"
-    }
   }
 }
