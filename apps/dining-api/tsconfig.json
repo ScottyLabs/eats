@@ -9,7 +9,6 @@
 
     /* Bundler mode */
     "rootDir": ".",
-    "baseUrl": "./src",
     "outDir": "./dist",
     "moduleResolution": "bundler",
     // "allowImportingTsExtensions": true,

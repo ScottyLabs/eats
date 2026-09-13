@@ -10,9 +10,11 @@
     "**/.settings.json",
     "**/.gitignore",
     "**/.gitattributes",
-    "node_modules",
-    "build",
-    "dist"
+    "**/node_modules/*",
+    "**/build/*",
+    "**/dist/*",
+    "**/tests/*",
+    "**/api.d.ts"
   ],
   "plugins": ["typescript", "import"],
   "options": {

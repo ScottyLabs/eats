@@ -10,10 +10,11 @@
     "**/.settings.json",
     "**/.gitignore",
     "**/.gitattributes",
-    "node_modules",
-    "build",
-    "dist",
-    "src/types/api.d.ts"
+    "**/node_modules/*",
+    "**/build/*",
+    "**/dist/*",
+    "**/tests/*",
+    "**/api.d.ts"
   ],
   "plugins": ["typescript", "react", "import", "jsx-a11y", "vitest"],
   "env": {

@@ -11,10 +11,6 @@
     "typecheck": "tsc",
     "test": "dotenv -e .env.test -- vitest --coverage",
     "eject": "vite eject",
-    "lint": "oxlint src tests",
-    "lint:fix": "oxlint src tests --fix",
-    "format": "oxfmt --check src tests",
-    "format:fix": "oxfmt --write src tests",
     "coverage": "pnpm vitest --coverage",
     "api-update": "pnpm openapi-typescript api.yaml -o src/types/api.d.ts"
   },
