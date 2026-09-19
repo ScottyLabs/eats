@@ -8,7 +8,9 @@
     ".github",
     "api.d.ts",
     "api.yaml",
-    "*.md"
+    "*.md",
+    "apps/dining-api/tests/html/**",
+    "apps/dining-api/tests/expectedData.ts"
   ],
   "bracketSpacing": true,
   "printWidth": 120,

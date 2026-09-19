@@ -1,5 +1,11 @@
 packages:
   - "apps/*"
+peerDependencyRules:
+  allowAny:
+    # for tsconfck and openapi-typescript, consider remove in the future
+    - typescript
+    # for crossws, consider remove in the future
+    - srvx
 allowBuilds:
   "@swc/core": true
   core-js: true

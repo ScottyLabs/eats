@@ -1,14 +1,16 @@
 import { defineConfig } from 'vitest/config';
-import tsconfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig({
+    resolve: {
+        tsconfigPaths: true,
+    },
     test: {
         globals: true,
         testTimeout: 60_000,
+        setupFiles: './tests/setup.ts',
         coverage: {
             provider: 'v8',
             reporter: ['text', 'json-summary', 'json'],
         },
     },
-    plugins: [tsconfigPaths()],
 });

@@ -206,21 +206,21 @@ describe('location review tests', () => {
         },
     );
     reviewTest.concurrent('add malformed rating', async ({ ctx: { db, locationId1, user1, locationId2, user2 } }) => {
-        expect(
+        await expect(
             addStarReview(db, {
                 locationId: locationId1,
                 userId: user2.id,
                 rating: 2.3,
             }),
         ).rejects.toThrowError();
-        expect(
+        await expect(
             addStarReview(db, {
                 locationId: locationId1,
                 userId: user2.id,
                 rating: 0,
             }),
         ).rejects.toThrowError();
-        expect(
+        await expect(
             addStarReview(db, {
                 locationId: locationId1,
                 userId: user2.id,
@@ -312,7 +312,7 @@ describe('location review tests', () => {
     reviewTest.concurrent(
         'add review to nonexistent tag',
         async ({ ctx: { db, locationId1, user1, locationId2, user2 } }) => {
-            expect(
+            await expect(
                 updateTagReview(db, {
                     locationId: locationId1,
                     userId: user1.id,

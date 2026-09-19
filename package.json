@@ -13,18 +13,21 @@
     "build:api": "pnpm --filter @cmueats/api build",
     "typecheck": "pnpm --filter @cmueats/web typecheck && pnpm --filter @cmueats/api typecheck",
     "lint": "oxlint .",
-    "lint:fix": "oxlint . --fix",
+    "lint:fix": "oxlint --fix .",
     "format": "oxfmt --check .",
-    "format:fix": "oxfmt --write ."
+    "format:fix": "oxfmt --write .",
+    "test": "vitest"
   },
   "devDependencies": {
+    "@vitest/coverage-v8": "^5.0.1",
     "oxfmt": "^0.67.0",
     "oxlint": "^1.82.0",
     "oxlint-tsgolint": "^7.0.2001",
-    "typescript": "^7.0.2"
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.1"
   },
   "engines": {
-    "node": ">=18.0.0",
+    "node": "^22.12.0 || >=24.0.0",
     "pnpm": ">=10.0.0"
   },
   "packageManager": "pnpm@12.4.1"

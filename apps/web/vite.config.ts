@@ -2,7 +2,6 @@ import { defineConfig, loadEnv } from 'vite';
 import { checker } from 'vite-plugin-checker';
 import { VitePWA, VitePWAOptions } from 'vite-plugin-pwa';
 import react from '@vitejs/plugin-react-swc';
-import viteTsconfigPaths from 'vite-tsconfig-paths';
 import svgrPlugin from 'vite-plugin-svgr';
 // import jwt from 'jsonwebtoken';
 import { z } from 'zod';
@@ -103,7 +102,6 @@ export default defineConfig(({ command, mode }) => {
     return {
         plugins: [
             react(),
-            viteTsconfigPaths(),
             svgrPlugin(),
             VitePWA({
                 // WARNING! Removing this library means that all clients with the VitePWA service worker installed *will never have it uninstalled*. (see https://github.com/ScottyLabs/cmueats/pull/642 for more details)
