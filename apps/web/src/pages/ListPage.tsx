@@ -70,7 +70,7 @@ function ListBox({
             <div className="list-controls-container" onClick={(ev) => ev.preventDefault()}>
                 <div className="list-controls-layout">
                     <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-                    <SelectLocation {...{ setLocationFilterQuery, locations }} />
+                    <SelectLocation {...{ locationFilterQuery, setLocationFilterQuery, locations }} />
                     <SelectSort
                         sortBy={sortBy}
                         setSortBy={(newSortBy) => {

@@ -12,16 +12,29 @@
     background: var(--input-bg);
     color: var(--black-400);
     box-shadow: 0 0 0 2px rgba(255, 255, 255, 0);
-    transition: all 0.2s;
+    transition:
+        box-shadow 0.2s,
+        border-color 0.2s;
     display: flex;
     svg {
         height: 50%;
         margin: auto;
     }
 }
+.icon-div--active {
+    border-color: var(--hover-accent-color);
+    background: color-mix(in srgb, var(--red-600) 20%, var(--input-bg));
+    border-width: 2px;
+
+    svg {
+        fill: currentColor;
+    }
+}
 
 .container:hover .icon-div {
-    transition: all 0.5s;
+    transition:
+        box-shadow 0.5s,
+        border-color 0.5s;
     box-shadow: 0 0 40px var(--hover-accent-color);
     border-color: var(--hover-accent-color);
     outline: none;
