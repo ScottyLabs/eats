@@ -40,6 +40,27 @@ miscEndpoints.get('/emails', async () => await new QueryUtils(db).getEmails(), {
         }),
     ),
 });
+miscEndpoints.get(
+    '/api/health',
+    async ({ status }) => {
+        try {
+            // TODO: await db`SELECT 1`           // or whatever a cheap ping looks like
+            return status(200, 'ok');
+        } catch {
+            return status(503, 'unavailable');
+        }
+    },
+    {
+        response: {
+            200: t.String(),
+            503: t.String(),
+        },
+        detail: {
+            description:
+                'ScottyLabs kennel deployment requires backend services to expose a GET /api/health endpoint that returns HTTP 200 once it is ready to accept traffic',
+        },
+    },
+);
 
 miscEndpoints.post(
     '/sendSlackMessage',

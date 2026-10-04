@@ -5,6 +5,14 @@ result.json
 dist/
 build/
 
+# Nix / devenv
+.devenv/
+.pre-commit-config.yaml
+
+# AI
+.mcp.json
+.claude
+
 # misc
 .DS_Store
 .env
