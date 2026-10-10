@@ -53,6 +53,7 @@
                 pkgs.pnpm_12
                 pkgs.pnpmConfigHook
               ];
+              env = (scottylabs.mkLib pkgs).buildEnv;
             };
 
           apiBuildDir = mkPnpm {
