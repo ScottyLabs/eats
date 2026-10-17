@@ -42,6 +42,7 @@
             pkgs.stdenv.mkDerivation {
               version = "0.1.0";
               src = ./.;
+              env = (scottylabs.mkLib pkgs).buildEnv;
               inherit
                 pname
                 pnpmDeps
@@ -53,7 +54,6 @@
                 pkgs.pnpm_12
                 pkgs.pnpmConfigHook
               ];
-              env = (scottylabs.mkLib pkgs).buildEnv;
             };
 
           apiBuildDir = mkPnpm {

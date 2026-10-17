@@ -2,10 +2,10 @@ import { useMemo } from 'react';
 import { Map, Marker, ColorScheme, PointOfInterestCategory } from 'mapkit-react';
 import { ILocation_Full } from '../types/locationTypes';
 import { mapMarkerBackgroundColors, mapMarkerTextColors } from '../constants/colors';
-import env from '../env';
 import { DrawerAPIContextProvider, useDrawerAPIContext } from '../contexts/DrawerAPIContext';
 import Drawer from '../components/Drawer';
 import css from './MapPage.module.css';
+import { loadMapkit } from '../util/mapkit.ts';
 
 function abbreviate(longName: string) {
     const importantPart = longName.split(/(-|\(|'|&| at )/i)[0]!.trim();
@@ -46,7 +46,9 @@ function MapSection({ locations }: { locations: ILocation_Full[] }) {
     const derivedRootColors = useMemo(() => window.getComputedStyle(document.body), []);
     return (
         <Map
-            token={env.VITE_AUTO_GENERATED_MAPKITJS_TOKEN}
+            // we leave the token empty to let the custom loader fill it in for us
+            token=""
+            load={loadMapkit}
             colorScheme={ColorScheme.Dark}
             initialRegion={initialRegion}
             excludedPOICategories={[PointOfInterestCategory.Restaurant]}

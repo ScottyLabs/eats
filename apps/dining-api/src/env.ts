@@ -29,5 +29,11 @@ const envSchema = z.object({
     ALERT_EMAIL_SEND: z.string(),
     ALERT_EMAIL_CC: z.string(),
     // see https://stackoverflow.com/questions/51933601/what-is-the-definitive-way-to-use-gmail-with-oauth-and-nodemailer for how to obtain refresh token
+
+    MAPKIT_JS_TEAM_ID: z.string(),
+    MAPKIT_JS_KEY_ID: z.string(),
+    MAPKIT_JS_AUTH_KEY: z.string(),
+    MAPKIT_JS_TTL: z.coerce.number().default(3600), // 1h, then the frontend will refresh
+    MAPKIT_ALLOWED_ORIGINS: z.string().default(''),
 });
 export const env = envSchema.parse(process.env);

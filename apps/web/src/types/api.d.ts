@@ -21,6 +21,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/mapkit-token": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Return a short-lived MapKit JWT scoped to MAPKIT_ALLOWED_ORIGINS for the frontend. */
+        get: operations["getMapkit-token"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/": {
         parameters: {
             query?: never;
@@ -62,6 +79,23 @@ export interface paths {
             cookie?: never;
         };
         get: operations["getEmails"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/health": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description ScottyLabs kennel deployment requires backend services to expose a GET /api/health endpoint that returns HTTP 200 once it is ready to accept traffic */
+        get: operations["getApiHealth"];
         put?: never;
         post?: never;
         delete?: never;
@@ -195,15 +229,46 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        user: ({
+                        user: (({
                             googleId: string;
                             id: number;
                             email: string;
-                            firstName: (string | null) | null;
-                            lastName: (string | null) | null;
-                            pictureUrl: (string | null) | null;
-                        } | null) | null;
+                            firstName: ((string | null) | null) | null;
+                            lastName: ((string | null) | null) | null;
+                            pictureUrl: ((string | null) | null) | null;
+                        } | null) | null) | null;
                     };
+                };
+            };
+        };
+    };
+    "getMapkit-token": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Response for status 200 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        token: string;
+                    };
+                };
+            };
+            /** @description Response for status 403 */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "text/plain": string;
                 };
             };
         };
@@ -245,9 +310,9 @@ export interface operations {
                 content: {
                     "application/json": {
                         times: {
-                            /** @example 1771714397336 */
+                            /** @example 1792207311856 */
                             start: number;
-                            /** @example 1771714397336 */
+                            /** @example 1792207311856 */
                             end: number;
                         }[];
                         todaysSoups: {
@@ -258,19 +323,20 @@ export interface operations {
                             name: string;
                             description: string;
                         }[];
-                        name: (string | null) | null;
+                        /** @example Schatz */
+                        name: ((string | null) | null) | null;
                         location: string;
-                        ratingsAvg: (number | null) | null;
+                        ratingsAvg: ((number | null) | null) | null;
                         ratingsCount: number;
-                        shortDescription: (string | null) | null;
+                        shortDescription: ((string | null) | null) | null;
                         description: string;
                         url: string;
-                        menu: (string | null) | null;
-                        coordinateLat: (number | null) | null;
-                        coordinateLng: (number | null) | null;
+                        menu: ((string | null) | null) | null;
+                        coordinateLat: ((number | null) | null) | null;
+                        coordinateLng: ((number | null) | null) | null;
                         acceptsOnlineOrders: boolean;
                         id: string;
-                        conceptId: (string | null) | null;
+                        conceptId: ((string | null) | null) | null;
                     }[];
                 };
             };
@@ -297,6 +363,35 @@ export interface operations {
                         /** @example alice72@andrew.cmu.edu */
                         email: string;
                     }[];
+                };
+            };
+        };
+    };
+    getApiHealth: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Response for status 200 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "text/plain": string;
+                };
+            };
+            /** @description Response for status 503 */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "text/plain": string;
                 };
             };
         };
@@ -345,8 +440,8 @@ export interface operations {
                 content: {
                     "application/json": {
                         starData: {
-                            avg: (number | null) | null;
-                            personalRating: (number | null) | null;
+                            avg: ((number | null) | null) | null;
+                            personalRating: ((number | null) | null) | null;
                             /**
                              * @description Count of ratings of star rating [{.5},{1,1.5},{2,2.5},{3,3.5},{4,4.5},{5}]
                              * @example [
@@ -365,12 +460,12 @@ export interface operations {
                             name: string;
                             totalVotes: number;
                             totalLikes: number;
-                            myReview: ({
+                            myReview: (({
                                 vote: boolean;
-                                text: (string | null) | null;
+                                text: ((string | null) | null) | null;
                                 createdAt: number;
                                 updatedAt: number;
-                            } | null) | null;
+                            } | null) | null) | null;
                         }[];
                     };
                 };
@@ -426,16 +521,16 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": {
-                    voteUp: (boolean | null) | null;
-                    text: (string | null) | null;
+                    voteUp: ((boolean | null) | null) | null;
+                    text: ((string | null) | null) | null;
                 };
                 "application/x-www-form-urlencoded": {
-                    voteUp: (boolean | null) | null;
-                    text: (string | null) | null;
+                    voteUp: ((boolean | null) | null) | null;
+                    text: ((string | null) | null) | null;
                 };
                 "multipart/form-data": {
-                    voteUp: (boolean | null) | null;
-                    text: (string | null) | null;
+                    voteUp: ((boolean | null) | null) | null;
+                    text: ((string | null) | null) | null;
                 };
             };
         };
@@ -492,8 +587,8 @@ export interface operations {
                 content: {
                     "application/json": {
                         id: number;
-                        userId: (number | null) | null;
-                        createdAt: Record<string, never> | string | number;
+                        userId: ((number | null) | null) | null;
+                        createdAt: string | number;
                         locationId: string;
                         message: string;
                     }[];

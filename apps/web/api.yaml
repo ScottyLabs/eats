@@ -1,9 +1,9 @@
-openapi: 3.0.3
 tags: []
 info:
   title: CMU Dining API
   description: Hello!~ Thanks for checking out the cmueats api. Have a great day!
   version: 2.0.0
+openapi: 3.1.2
 paths:
   /whoami:
     get:
@@ -16,45 +16,67 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                  - user
                 properties:
                   user:
                     nullable: true
-                    anyOf:
-                      - type: object
-                        properties:
-                          googleId:
-                            type: string
-                          id:
-                            type: number
-                          email:
-                            type: string
-                          firstName:
-                            nullable: true
-                            anyOf:
-                              - type: string
-                              - type: "null"
-                          lastName:
-                            nullable: true
-                            anyOf:
-                              - type: string
-                              - type: "null"
-                          pictureUrl:
-                            nullable: true
-                            anyOf:
-                              - type: string
-                              - type: "null"
-                        required:
-                          - googleId
-                          - id
-                          - email
-                          - firstName
-                          - lastName
-                          - pictureUrl
-                      - type: "null"
-                required:
-                  - user
-                additionalProperties: false
+                    type:
+                      - object
+                      - "null"
+                    required:
+                      - googleId
+                      - id
+                      - email
+                      - firstName
+                      - lastName
+                      - pictureUrl
+                    properties:
+                      googleId:
+                        type: string
+                      id:
+                        type: number
+                      email:
+                        type: string
+                      firstName:
+                        nullable: true
+                        type:
+                          - string
+                          - "null"
+                      lastName:
+                        nullable: true
+                        type:
+                          - string
+                          - "null"
+                      pictureUrl:
+                        nullable: true
+                        type:
+                          - string
+                          - "null"
       operationId: getWhoami
+  /mapkit-token:
+    get:
+      description: Return a short-lived MapKit JWT scoped to MAPKIT_ALLOWED_ORIGINS
+        for the frontend.
+      responses:
+        "200":
+          description: Response for status 200
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - token
+                properties:
+                  token:
+                    type: string
+        "403":
+          description: Response for status 403
+          content:
+            text/plain:
+              schema:
+                type: string
+      operationId: getMapkit-token
   /:
     get:
       responses:
@@ -80,96 +102,6 @@ paths:
                 type: array
                 items:
                   type: object
-                  properties:
-                    times:
-                      type: array
-                      items:
-                        type: object
-                        properties:
-                          start:
-                            examples:
-                              - 1771714397336
-                            type: number
-                          end:
-                            examples:
-                              - 1771714397336
-                            type: number
-                        required:
-                          - start
-                          - end
-                    todaysSoups:
-                      type: array
-                      items:
-                        type: object
-                        properties:
-                          name:
-                            type: string
-                          description:
-                            type: string
-                        required:
-                          - name
-                          - description
-                    todaysSpecials:
-                      type: array
-                      items:
-                        type: object
-                        properties:
-                          name:
-                            type: string
-                          description:
-                            type: string
-                        required:
-                          - name
-                          - description
-                    name:
-                      nullable: true
-                      anyOf:
-                        - examples:
-                            - Schatz
-                          type: string
-                        - type: "null"
-                    location:
-                      type: string
-                    ratingsAvg:
-                      nullable: true
-                      anyOf:
-                        - type: number
-                        - type: "null"
-                    ratingsCount:
-                      type: number
-                    shortDescription:
-                      nullable: true
-                      anyOf:
-                        - type: string
-                        - type: "null"
-                    description:
-                      type: string
-                    url:
-                      type: string
-                    menu:
-                      nullable: true
-                      anyOf:
-                        - type: string
-                        - type: "null"
-                    coordinateLat:
-                      nullable: true
-                      anyOf:
-                        - type: number
-                        - type: "null"
-                    coordinateLng:
-                      nullable: true
-                      anyOf:
-                        - type: number
-                        - type: "null"
-                    acceptsOnlineOrders:
-                      type: boolean
-                    id:
-                      type: string
-                    conceptId:
-                      nullable: true
-                      anyOf:
-                        - type: string
-                        - type: "null"
                   required:
                     - times
                     - todaysSoups
@@ -187,6 +119,96 @@ paths:
                     - acceptsOnlineOrders
                     - id
                     - conceptId
+                  properties:
+                    times:
+                      type: array
+                      items:
+                        type: object
+                        required:
+                          - start
+                          - end
+                        properties:
+                          start:
+                            examples:
+                              - 1792207311856
+                            type: number
+                          end:
+                            examples:
+                              - 1792207311856
+                            type: number
+                    todaysSoups:
+                      type: array
+                      items:
+                        type: object
+                        required:
+                          - name
+                          - description
+                        properties:
+                          name:
+                            type: string
+                          description:
+                            type: string
+                    todaysSpecials:
+                      type: array
+                      items:
+                        type: object
+                        required:
+                          - name
+                          - description
+                        properties:
+                          name:
+                            type: string
+                          description:
+                            type: string
+                    name:
+                      nullable: true
+                      examples:
+                        - Schatz
+                      type:
+                        - string
+                        - "null"
+                    location:
+                      type: string
+                    ratingsAvg:
+                      nullable: true
+                      type:
+                        - number
+                        - "null"
+                    ratingsCount:
+                      type: number
+                    shortDescription:
+                      nullable: true
+                      type:
+                        - string
+                        - "null"
+                    description:
+                      type: string
+                    url:
+                      type: string
+                    menu:
+                      nullable: true
+                      type:
+                        - string
+                        - "null"
+                    coordinateLat:
+                      nullable: true
+                      type:
+                        - number
+                        - "null"
+                    coordinateLng:
+                      nullable: true
+                      type:
+                        - number
+                        - "null"
+                    acceptsOnlineOrders:
+                      type: boolean
+                    id:
+                      type: string
+                    conceptId:
+                      nullable: true
+                      type:
+                        - string
+                        - "null"
       operationId: getV2Locations
   /emails:
     get:
@@ -199,6 +221,9 @@ paths:
                 type: array
                 items:
                   type: object
+                  required:
+                    - name
+                    - email
                   properties:
                     name:
                       example: Alice
@@ -206,10 +231,26 @@ paths:
                     email:
                       example: alice72@andrew.cmu.edu
                       type: string
-                  required:
-                    - name
-                    - email
       operationId: getEmails
+  /api/health:
+    get:
+      description: ScottyLabs kennel deployment requires backend services to expose a
+        GET /api/health endpoint that returns HTTP 200 once it is ready to
+        accept traffic
+      responses:
+        "200":
+          description: Response for status 200
+          content:
+            text/plain:
+              schema:
+                type: string
+        "503":
+          description: Response for status 503
+          content:
+            text/plain:
+              schema:
+                type: string
+      operationId: getApiHealth
   /report:
     post:
       description: Endpoint for reporting errors in information
@@ -219,6 +260,9 @@ paths:
           application/json:
             schema:
               type: object
+              required:
+                - locationId
+                - message
               properties:
                 locationId:
                   type: string
@@ -226,12 +270,12 @@ paths:
                   minLength: 1
                   maxLength: 512
                   type: string
-              required:
-                - locationId
-                - message
           application/x-www-form-urlencoded:
             schema:
               type: object
+              required:
+                - locationId
+                - message
               properties:
                 locationId:
                   type: string
@@ -239,12 +283,12 @@ paths:
                   minLength: 1
                   maxLength: 512
                   type: string
-              required:
-                - locationId
-                - message
           multipart/form-data:
             schema:
               type: object
+              required:
+                - locationId
+                - message
               properties:
                 locationId:
                   type: string
@@ -252,9 +296,6 @@ paths:
                   minLength: 1
                   maxLength: 512
                   type: string
-              required:
-                - locationId
-                - message
       operationId: postReport
   /v2/locations/{locationId}/reviews/summary:
     get:
@@ -271,20 +312,27 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                  - starData
+                  - tagData
                 properties:
                   starData:
                     type: object
+                    required:
+                      - avg
+                      - personalRating
+                      - buckets
                     properties:
                       avg:
                         nullable: true
-                        anyOf:
-                          - type: number
-                          - type: "null"
+                        type:
+                          - number
+                          - "null"
                       personalRating:
                         nullable: true
-                        anyOf:
-                          - type: number
-                          - type: "null"
+                        type:
+                          - number
+                          - "null"
                       buckets:
                         example:
                           - 0
@@ -298,14 +346,16 @@ paths:
                         type: array
                         items:
                           type: number
-                    required:
-                      - avg
-                      - personalRating
-                      - buckets
                   tagData:
                     type: array
                     items:
                       type: object
+                      required:
+                        - id
+                        - name
+                        - totalVotes
+                        - totalLikes
+                        - myReview
                       properties:
                         id:
                           type: number
@@ -317,36 +367,26 @@ paths:
                           type: number
                         myReview:
                           nullable: true
-                          anyOf:
-                            - type: object
-                              properties:
-                                vote:
-                                  type: boolean
-                                text:
-                                  nullable: true
-                                  anyOf:
-                                    - type: string
-                                    - type: "null"
-                                createdAt:
-                                  type: number
-                                updatedAt:
-                                  type: number
-                              required:
-                                - vote
-                                - text
-                                - createdAt
-                                - updatedAt
-                            - type: "null"
-                      required:
-                        - id
-                        - name
-                        - totalVotes
-                        - totalLikes
-                        - myReview
-                required:
-                  - starData
-                  - tagData
-                additionalProperties: false
+                          type:
+                            - object
+                            - "null"
+                          required:
+                            - vote
+                            - text
+                            - createdAt
+                            - updatedAt
+                          properties:
+                            vote:
+                              type: boolean
+                            text:
+                              nullable: true
+                              type:
+                                - string
+                                - "null"
+                            createdAt:
+                              type: number
+                            updatedAt:
+                              type: number
       operationId: getV2LocationsByLocationIdReviewsSummary
   /v2/locations/{locationId}/reviews/stars/me:
     put:
@@ -362,36 +402,36 @@ paths:
           application/json:
             schema:
               type: object
+              required:
+                - stars
               properties:
                 stars:
                   minimum: 0.5
                   maximum: 5
                   multipleOf: 0.5
                   type: number
-              required:
-                - stars
           application/x-www-form-urlencoded:
             schema:
               type: object
+              required:
+                - stars
               properties:
                 stars:
                   minimum: 0.5
                   maximum: 5
                   multipleOf: 0.5
                   type: number
-              required:
-                - stars
           multipart/form-data:
             schema:
               type: object
+              required:
+                - stars
               properties:
                 stars:
                   minimum: 0.5
                   maximum: 5
                   multipleOf: 0.5
                   type: number
-              required:
-                - stars
       operationId: putV2LocationsByLocationIdReviewsStarsMe
     delete:
       parameters:
@@ -420,57 +460,57 @@ paths:
           application/json:
             schema:
               type: object
-              properties:
-                voteUp:
-                  nullable: true
-                  anyOf:
-                    - type: boolean
-                    - type: "null"
-                text:
-                  nullable: true
-                  anyOf:
-                    - maxLength: 1000
-                      type: string
-                    - type: "null"
               required:
                 - voteUp
                 - text
+              properties:
+                voteUp:
+                  nullable: true
+                  type:
+                    - boolean
+                    - "null"
+                text:
+                  nullable: true
+                  maxLength: 1000
+                  type:
+                    - string
+                    - "null"
           application/x-www-form-urlencoded:
             schema:
               type: object
-              properties:
-                voteUp:
-                  nullable: true
-                  anyOf:
-                    - type: boolean
-                    - type: "null"
-                text:
-                  nullable: true
-                  anyOf:
-                    - maxLength: 1000
-                      type: string
-                    - type: "null"
               required:
                 - voteUp
                 - text
+              properties:
+                voteUp:
+                  nullable: true
+                  type:
+                    - boolean
+                    - "null"
+                text:
+                  nullable: true
+                  maxLength: 1000
+                  type:
+                    - string
+                    - "null"
           multipart/form-data:
             schema:
               type: object
-              properties:
-                voteUp:
-                  nullable: true
-                  anyOf:
-                    - type: boolean
-                    - type: "null"
-                text:
-                  nullable: true
-                  anyOf:
-                    - maxLength: 1000
-                      type: string
-                    - type: "null"
               required:
                 - voteUp
                 - text
+              properties:
+                voteUp:
+                  nullable: true
+                  type:
+                    - boolean
+                    - "null"
+                text:
+                  nullable: true
+                  maxLength: 1000
+                  type:
+                    - string
+                    - "null"
       operationId: putV2LocationsByLocationIdReviewsTagsByTagIdMe
   /v2/locations/{locationId}/reviews/tags:
     get:
@@ -489,6 +529,16 @@ paths:
                 type: array
                 items:
                   type: object
+                  required:
+                    - writtenReview
+                    - tagName
+                    - id
+                    - tagId
+                    - userId
+                    - locationId
+                    - vote
+                    - createdAt
+                    - updatedAt
                   properties:
                     writtenReview:
                       type: string
@@ -508,16 +558,6 @@ paths:
                       type: number
                     updatedAt:
                       type: number
-                  required:
-                    - writtenReview
-                    - tagName
-                    - id
-                    - tagId
-                    - userId
-                    - locationId
-                    - vote
-                    - createdAt
-                    - updatedAt
       operationId: getV2LocationsByLocationIdReviewsTags
   /v2/locations/{locationId}/reports:
     get:
@@ -536,19 +576,24 @@ paths:
                 type: array
                 items:
                   type: object
+                  required:
+                    - id
+                    - userId
+                    - createdAt
+                    - locationId
+                    - message
                   properties:
                     id:
                       type: number
                     userId:
                       nullable: true
-                      anyOf:
-                        - type: number
-                        - type: "null"
+                      type:
+                        - number
+                        - "null"
                     createdAt:
                       anyOf:
-                        - type: Date
-                        - format: date-time
-                          type: string
+                        - type: string
+                          format: date-time
                         - format: date
                           type: string
                         - type: number
@@ -556,13 +601,6 @@ paths:
                       type: string
                     message:
                       type: string
-                  required:
-                    - id
-                    - userId
-                    - createdAt
-                    - locationId
-                    - message
       operationId: getV2LocationsByLocationIdReports
 components:
   schemas: {}
-

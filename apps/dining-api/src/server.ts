@@ -10,6 +10,7 @@ import { Settings } from 'luxon';
 import { refreshDB } from 'reload';
 import { authEndpoints } from 'endpoints/auth';
 import { miscEndpoints } from 'endpoints/misc';
+import { mapkitEndpoints } from 'endpoints/mapkit';
 import { reviewEndpoints } from 'endpoints/reviews';
 Settings.defaultZone = 'America/New_York';
 
@@ -51,6 +52,7 @@ app.onAfterHandle(({ responseValue }) => {
 app.use(cors());
 app.use(authEndpoints);
 app.use(deprecatedEndpoints);
+app.use(mapkitEndpoints);
 app.use(miscEndpoints);
 app.use(reviewEndpoints);
 
