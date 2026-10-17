@@ -66,3 +66,14 @@ We get the entire list of locations from `DINING_URL`, fetch location specifics 
 ## Random notes
 
 the "cheerio" package is pinned at version "1.0.0-rc.12" because newer versions seem to be incompatible with jest.
+
+
+## External Google locations
+
+Set `GOOGLE_PLACES_API_KEY` in `.env`.
+
+`description` is optional & is the blurb from the link in google maps.
+
+`refreshDB` reads this manually maintained table, importing Google Place Details in batches of three.
+
+External locations set `conceptId`, menu, online-ordering support, daily soups, and daily specials as `null` unless someone volunteers to maintain/comes up with a fancy scraper.

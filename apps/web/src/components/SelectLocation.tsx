@@ -4,6 +4,7 @@ import css from './SelectDropdown.module.css';
 
 type SelectLocationProps = {
     setLocationFilterQuery: React.Dispatch<string>;
+    locationFilterQuery: string;
     locations: ILocation_Full[] | undefined;
 };
 
@@ -11,7 +12,7 @@ function getPrimaryLocation(locationString: string) {
     return locationString.split(',', 1)[0];
 }
 
-function SelectLocation({ setLocationFilterQuery, locations }: SelectLocationProps) {
+function SelectLocation({ setLocationFilterQuery, locationFilterQuery, locations }: SelectLocationProps) {
     const deduplicatedBuildingNames = locations
         ? [...new Set(locations.map((loc) => getPrimaryLocation(loc.location)))]
         : [];
@@ -21,8 +22,15 @@ function SelectLocation({ setLocationFilterQuery, locations }: SelectLocationPro
             <div className={css['icon-div']}>
                 <Filter />
             </div>
-            <select onChange={(e) => setLocationFilterQuery(e.target.value)} className={css.select}>
-                <option value="" key="All Buildings" label="All Buildings" />
+            <select
+                aria-label="Filter by location"
+                value={locationFilterQuery}
+                onChange={(e) => setLocationFilterQuery(e.target.value)}
+                className={css.select}
+            >
+                <option value="">All</option>
+                <option value="on-campus">On Campus</option>
+                <option value="off-campus">Off Campus</option>
                 {deduplicatedBuildingNames.map((location) => (
                     <option key={location} value={location}>
                         {location}

@@ -16,6 +16,8 @@ export const expectedLocationData: ILocation[] = [
       lng: -79.94,
     },
     acceptsOnlineOrders: true,
+    onCampus: true,
+    googlePlaceID: null,
     times: [
       {
         year: 2024,
@@ -89,6 +91,8 @@ export const expectedLocationData: ILocation[] = [
       lng: -79.942258,
     },
     acceptsOnlineOrders: true,
+    onCampus: true,
+    googlePlaceID: null,
     times: [],
     today: {
       year: 2024,
@@ -113,6 +117,8 @@ export const expectedLocationData: ILocation[] = [
       lng: -79.942258,
     },
     acceptsOnlineOrders: true,
+    onCampus: true,
+    googlePlaceID: null,
     times: [],
     today: {
       year: 2024,
@@ -136,6 +142,8 @@ export const expectedLocationData: ILocation[] = [
       lng: -79.942258,
     },
     acceptsOnlineOrders: true,
+    onCampus: true,
+    googlePlaceID: null,
     times: [],
     today: {
       year: 2024,
@@ -159,6 +167,8 @@ export const expectedLocationData: ILocation[] = [
       lng: -79.942258,
     },
     acceptsOnlineOrders: true,
+    onCampus: true,
+    googlePlaceID: null,
     times: [],
     today: {
       year: 2024,
@@ -183,6 +193,8 @@ export const expectedLocationData: ILocation[] = [
       lng: -79.942258,
     },
     acceptsOnlineOrders: true,
+    onCampus: true,
+    googlePlaceID: null,
     times: [],
     today: {
       year: 2024,
@@ -207,6 +219,8 @@ export const expectedLocationData: ILocation[] = [
       lng: -79.942258,
     },
     acceptsOnlineOrders: true,
+    onCampus: true,
+    googlePlaceID: null,
     times: [],
     today: {
       year: 2024,
@@ -231,6 +245,8 @@ export const expectedLocationData: ILocation[] = [
       lng: -79.942125,
     },
     acceptsOnlineOrders: false,
+    onCampus: true,
+    googlePlaceID: null,
     times: [
       {
         year: 2024,
@@ -305,6 +321,8 @@ export const expectedLocationData: ILocation[] = [
       lng: -79.942258,
     },
     acceptsOnlineOrders: true,
+    onCampus: true,
+    googlePlaceID: null,
     times: [],
     today: {
       year: 2024,
@@ -329,6 +347,8 @@ export const expectedLocationData: ILocation[] = [
       lng: -79.942258,
     },
     acceptsOnlineOrders: true,
+    onCampus: true,
+    googlePlaceID: null,
     times: [],
     today: {
       year: 2024,
@@ -353,6 +373,8 @@ export const expectedLocationData: ILocation[] = [
       lng: -79.942258,
     },
     acceptsOnlineOrders: true,
+    onCampus: true,
+    googlePlaceID: null,
     times: [],
     today: {
       year: 2024,
@@ -377,6 +399,8 @@ export const expectedLocationData: ILocation[] = [
       lng: -79.942258,
     },
     acceptsOnlineOrders: true,
+    onCampus: true,
+    googlePlaceID: null,
     times: [],
     today: {
       year: 2024,
@@ -400,6 +424,8 @@ export const expectedLocationData: ILocation[] = [
       lng: -79.9455957,
     },
     acceptsOnlineOrders: true,
+    onCampus: true,
+    googlePlaceID: null,
     times: [
       {
         year: 2024,
@@ -467,6 +493,8 @@ export const expectedLocationData: ILocation[] = [
       lng: -79.942258,
     },
     acceptsOnlineOrders: true,
+    onCampus: true,
+    googlePlaceID: null,
     times: [],
     today: {
       year: 2024,
@@ -491,6 +519,8 @@ export const expectedLocationData: ILocation[] = [
       lng: -79.942258,
     },
     acceptsOnlineOrders: true,
+    onCampus: true,
+    googlePlaceID: null,
     times: [],
     today: {
       year: 2024,
@@ -515,6 +545,8 @@ export const expectedLocationData: ILocation[] = [
       lng: -79.942258,
     },
     acceptsOnlineOrders: true,
+    onCampus: true,
+    googlePlaceID: null,
     times: [],
     today: {
       year: 2024,
@@ -539,6 +571,8 @@ export const expectedLocationData: ILocation[] = [
       lng: -79.942258,
     },
     acceptsOnlineOrders: true,
+    onCampus: true,
+    googlePlaceID: null,
     times: [],
     today: {
       year: 2024,
@@ -563,6 +597,8 @@ export const expectedLocationData: ILocation[] = [
       lng: -79.942258,
     },
     acceptsOnlineOrders: true,
+    onCampus: true,
+    googlePlaceID: null,
     times: [],
     today: {
       year: 2024,
@@ -587,6 +623,8 @@ export const expectedLocationData: ILocation[] = [
       lng: -79.942258,
     },
     acceptsOnlineOrders: true,
+    onCampus: true,
+    googlePlaceID: null,
     times: [],
     today: {
       year: 2024,
@@ -610,6 +648,8 @@ export const expectedLocationData: ILocation[] = [
       lng: -79.9418151,
     },
     acceptsOnlineOrders: false,
+    onCampus: true,
+    googlePlaceID: null,
     times: [
       {
         year: 2024,
@@ -768,6 +808,8 @@ export const expectedLocationData: ILocation[] = [
       lng: -79.942258,
     },
     acceptsOnlineOrders: true,
+    onCampus: true,
+    googlePlaceID: null,
     times: [],
     today: {
       year: 2024,
@@ -792,6 +834,8 @@ export const expectedLocationData: ILocation[] = [
       lng: -79.942258,
     },
     acceptsOnlineOrders: true,
+    onCampus: true,
+    googlePlaceID: null,
     times: [],
     today: {
       year: 2024,
@@ -816,6 +860,8 @@ export const expectedLocationData: ILocation[] = [
       lng: -79.942258,
     },
     acceptsOnlineOrders: true,
+    onCampus: true,
+    googlePlaceID: null,
     times: [],
     today: {
       year: 2024,
@@ -840,6 +886,8 @@ export const expectedLocationData: ILocation[] = [
       lng: -79.942258,
     },
     acceptsOnlineOrders: true,
+    onCampus: true,
+    googlePlaceID: null,
     times: [],
     today: {
       year: 2024,
@@ -863,6 +911,8 @@ export const expectedLocationData: ILocation[] = [
       lng: -79.942258,
     },
     acceptsOnlineOrders: true,
+    onCampus: true,
+    googlePlaceID: null,
     times: [],
     today: {
       year: 2024,
@@ -886,6 +936,8 @@ export const expectedLocationData: ILocation[] = [
       lng: -791.942125,
     },
     acceptsOnlineOrders: false,
+    onCampus: true,
+    googlePlaceID: null,
     times: [
       {
         year: 2024,
@@ -945,6 +997,8 @@ export const expectedLocationData: ILocation[] = [
       lng: -79.942258,
     },
     acceptsOnlineOrders: true,
+    onCampus: true,
+    googlePlaceID: null,
     times: [],
     today: {
       year: 2024,
@@ -969,6 +1023,8 @@ export const expectedLocationData: ILocation[] = [
       lng: -79.942258,
     },
     acceptsOnlineOrders: true,
+    onCampus: true,
+    googlePlaceID: null,
     times: [],
     today: {
       year: 2024,
@@ -993,6 +1049,8 @@ export const expectedLocationData: ILocation[] = [
       lng: -79.942258,
     },
     acceptsOnlineOrders: true,
+    onCampus: true,
+    googlePlaceID: null,
     times: [],
     today: {
       year: 2024,
@@ -1016,6 +1074,8 @@ export const expectedLocationData: ILocation[] = [
       lng: -79.942258,
     },
     acceptsOnlineOrders: true,
+    onCampus: true,
+    googlePlaceID: null,
     times: [],
     today: {
       year: 2024,
@@ -1040,6 +1100,8 @@ export const expectedLocationData: ILocation[] = [
       lng: -79.942258,
     },
     acceptsOnlineOrders: true,
+    onCampus: true,
+    googlePlaceID: null,
     times: [],
     today: {
       year: 2024,
@@ -1064,6 +1126,8 @@ export const expectedLocationData: ILocation[] = [
       lng: -79.942258,
     },
     acceptsOnlineOrders: true,
+    onCampus: true,
+    googlePlaceID: null,
     times: [],
     today: {
       year: 2024,

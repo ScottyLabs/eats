@@ -1,4 +1,4 @@
-import { ILocation } from 'types';
+import { ILocation, ExternalLocation } from 'types';
 import { DBType } from './db';
 import {
     externalIdToInternalIdTable,
@@ -26,11 +26,11 @@ async function getInternalId(db: DBType, externalId: string) {
  * @param location
  * @returns the internal id of the location that was added
  */
-export async function addLocationDataToDb(db: DBType, location: ILocation) {
-    const internalId = await getInternalId(db, location.conceptId.toString());
+export async function addLocationDataToDb(db: DBType, location: ILocation | ExternalLocation) {
+    let internalId =
+        location.conceptId === null ? crypto.randomUUID() : await getInternalId(db, location.conceptId.toString());
 
-    const locationDbEntry: typeof locationDataTable.$inferInsert = {
-        id: internalId,
+    const locationDbEntry: Omit<typeof locationDataTable.$inferInsert, 'id'> = {
         name: location.name,
         shortDescription: location.shortDescription,
         description: location.description,
@@ -40,12 +40,21 @@ export async function addLocationDataToDb(db: DBType, location: ILocation) {
         coordinateLat: location.coordinates?.lat,
         coordinateLng: location.coordinates?.lng,
         acceptsOnlineOrders: location.acceptsOnlineOrders,
+        onCampus: location.onCampus,
+        googlePlaceID: location.googlePlaceID,
+        hoursValidThrough: location.conceptId === null ? location.hoursValidThrough : null,
     };
     await db.transaction(async (tx) => {
-        await tx.insert(locationDataTable).values(locationDbEntry).onConflictDoUpdate({
-            target: locationDataTable.id,
-            set: locationDbEntry,
-        });
+        // Preserve the UUID (and its reviews/reports) on every Google refresh, including concurrent imports.
+        const [saved] = await tx
+            .insert(locationDataTable)
+            .values({ id: internalId, ...locationDbEntry })
+            .onConflictDoUpdate({
+                target: location.conceptId === null ? locationDataTable.googlePlaceID : locationDataTable.id,
+                set: locationDbEntry,
+            })
+            .returning({ id: locationDataTable.id });
+        internalId = saved!.id;
 
         const todayAsSQLString = `${location.today.year}-${pad(location.today.month)}-${pad(location.today.day)}`;
         // add specials
@@ -77,7 +86,7 @@ export async function addLocationDataToDb(db: DBType, location: ILocation) {
         await tx
             .delete(timesTable)
             .where(and(eq(timesTable.locationId, internalId), and(gte(timesTable.date, todayAsSQLString))));
-        if (location.times.length) {
+        if (location.times?.length) {
             await tx.insert(timesTable).values(
                 location.times.map((time) => ({
                     locationId: internalId,
@@ -89,13 +98,14 @@ export async function addLocationDataToDb(db: DBType, location: ILocation) {
         }
 
         // in case the conceptId->internalId mapping entry isn't there
-        await tx
-            .insert(externalIdToInternalIdTable)
-            .values({
-                internalId: internalId,
-                externalId: location.conceptId.toString(),
-            })
-            .onConflictDoNothing({ target: externalIdToInternalIdTable.externalId });
+        if (location.conceptId !== null)
+            await tx
+                .insert(externalIdToInternalIdTable)
+                .values({
+                    internalId: internalId,
+                    externalId: location.conceptId.toString(),
+                })
+                .onConflictDoNothing({ target: externalIdToInternalIdTable.externalId });
     });
     return internalId;
 }

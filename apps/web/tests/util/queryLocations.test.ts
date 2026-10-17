@@ -6,6 +6,11 @@ import { date, dateObj } from './util';
 
 describe('queryLocations.ts', () => {
     describe('getLocationStatus', () => {
+        test('unknown hours are distinct from a closed schedule', () => {
+            const status = getLocationStatus(null, dateObj('1/1/34 1:00 AM'));
+            expect(status.locationState).toBe(LocationState.UNKNOWN);
+            expect(status.statusMsg.longStatus).toBe('Hours unavailable');
+        });
         test('basic', () => {
             const status = getLocationStatus(
                 [

@@ -39,14 +39,23 @@ export const locationDataTable = pgTable('location_data', {
     id: text('id').primaryKey(),
     name: text('name'),
     shortDescription: text('short_description'),
-    description: text('description').notNull(),
+    description: text('description'),
     url: text('url').notNull(),
     menu: text('menu'),
     /** The human-readable version of the location */
     location: text('location').notNull(),
     coordinateLat: decimal('coordinate_lat', { mode: 'number', scale: 30 }),
     coordinateLng: decimal('coordinate_lng', { mode: 'number', scale: 30 }),
-    acceptsOnlineOrders: boolean('accepts_online_orders').notNull(),
+    acceptsOnlineOrders: boolean('accepts_online_orders'),
+    onCampus: boolean('location_is_on_campus').notNull(),
+    googlePlaceID: text('google_place_id').unique(),
+    hoursValidThrough: date('hours_valid_through'),
+});
+
+// manually maintained :skull:
+export const externalGoogleLocationsTable = pgTable('external_google_locations', {
+    googlePlaceID: text('google_place_id').primaryKey(),
+    description: text('description'),
 });
 export const timesTable = pgTable(
     'location_times',

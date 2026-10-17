@@ -1,9 +1,9 @@
 import { ILocation } from 'types';
 
-type T = { [key: string]: T } | T[] | string | number | undefined;
+type T = { [key: string]: T } | T[] | string | number | boolean | null | undefined;
 export function getObjDiffs(prevObject: T, newObject: T, path: string = '~'): string[] {
     let diffs: string[] = [];
-    if (typeof prevObject === 'object' && typeof newObject === 'object') {
+    if (prevObject !== null && newObject !== null && typeof prevObject === 'object' && typeof newObject === 'object') {
         if (prevObject instanceof Array && newObject instanceof Array) {
             diffs = diffs.concat(getArrayDiffs(prevObject, newObject, path));
         } else if (!(prevObject instanceof Array) && !(newObject instanceof Array)) {
@@ -28,7 +28,7 @@ export function getObjDiffs(prevObject: T, newObject: T, path: string = '~'): st
         } else if (prevObject !== undefined && newObject === undefined) {
             diffs.push(`deleted value at ${path}: ${JSON.stringify(prevObject)}`);
         } else if (prevObject !== newObject) {
-            diffs.push(`changed value at ${path}: ${prevObject} ${newObject}`);
+            diffs.push(`changed value at ${path}: ${JSON.stringify(prevObject)} ${JSON.stringify(newObject)}`);
         }
     }
     return diffs;

@@ -9,6 +9,8 @@ import { dbTest } from './dbstub';
 const locationIn: ILocation = {
     name: 'dbTest',
     acceptsOnlineOrders: false,
+    onCampus: true,
+    googlePlaceID: null,
     conceptId: 1,
     coordinates: { lat: 1, lng: 10 },
     description: 'description',
@@ -40,6 +42,8 @@ const locationOut = {
     coordinateLat: 1,
     coordinateLng: 10,
     acceptsOnlineOrders: false,
+    onCampus: true,
+    googlePlaceID: null,
     times: [],
     todaysSoups: [],
     todaysSpecials: [],

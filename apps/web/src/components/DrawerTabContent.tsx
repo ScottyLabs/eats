@@ -14,7 +14,7 @@ function DrawerTabContent() {
     const { location } = drawerContext;
     const { activeTab } = useDrawerAPIContext();
 
-    const timeSlots = next7DaysReadableString(location.times, now);
+    const timeSlots = location.times === null ? null : next7DaysReadableString(location.times, now);
     const specials = location.todaysSpecials ?? [];
     const soups = location.todaysSoups ?? [];
     const menu = location.menu ?? '';
@@ -29,7 +29,8 @@ function DrawerTabContent() {
                 <h4 className={css['section-header']}>Hours</h4>
 
                 <div className={css['hours-list']}>
-                    {timeSlots.map((slot, index) => {
+                    {timeSlots === null && <p>Hours unavailable</p>}
+                    {timeSlots?.map((slot, index) => {
                         const label = daysStartingFromSunday[(index + dayOffsetFromSunday) % 7];
                         const isToday = index === 0;
                         return (
@@ -101,6 +102,19 @@ function DrawerTabContent() {
                 <>
                     {renderDescription()}
                     {renderHours()}
+                    {location.onCampus === false && location.googlePlaceID && (
+                        <div className={css.attribution}>
+                            View in{' '}
+                            <a
+                                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location.name)}&query_place_id=${encodeURIComponent(location.googlePlaceID)}`}
+                                target="_blank"
+                                rel="noreferrer"
+                                onClick={(event) => event.stopPropagation()}
+                            >
+                                Google Maps
+                            </a>
+                        </div>
+                    )}
                     {(specials.length > 0 || soups.length > 0) && renderTodaysSpecials()}
                 </>
             )}

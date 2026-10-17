@@ -95,6 +95,24 @@ describe('useFilteredLocations', () => {
         expect(result).toHaveLength(6);
     });
 
+    test('campus options filter by the campus flag and preserve legacy campus records', () => {
+        const campus = makeLocation({ name: 'Campus Cafe', onCampus: true });
+        const offCampus = makeLocation({ name: 'Neighborhood Cafe', onCampus: false });
+        const mixed = [campus, offCampus, LIBRARY];
+        expect(filter(mixed, '', 'on-campus')).toEqual([campus, LIBRARY]);
+        expect(filter(mixed, '', 'off-campus')).toEqual([offCampus]);
+        expect(filter(mixed, '', '')).toEqual(mixed);
+    });
+
+    test('campus options combine with search and building selections still work', () => {
+        const offCampus = makeLocation({ name: 'Cafe', location: 'Forbes Avenue', onCampus: false });
+        const mixed = [CAFE, LIBRARY, offCampus];
+        expect(filter(mixed, 'Cafe', 'on-campus')).toEqual([CAFE]);
+        expect(filter(mixed, 'Cafe', 'off-campus')).toEqual([offCampus]);
+        expect(filter(mixed, '', 'Forbes Avenue')).toEqual([offCampus]);
+        expect(filter(mixed, '', 'Cohon Center')).toEqual([CAFE]);
+    });
+
     test('filters by search query matching name', () => {
         const result = filter(locations, 'Cafe', '');
         expect(result).toHaveLength(1);

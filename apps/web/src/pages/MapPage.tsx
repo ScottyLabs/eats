@@ -86,15 +86,17 @@ function MapSection({ locations }: { locations: ILocation_Full[] }) {
     );
 }
 function MapPage({ locations }: { locations: ILocation_Full[] | undefined }) {
+    // Places content must be shown on a Google map; this view uses Apple MapKit.
+    const mapLocations = locations?.filter((location) => location.onCampus !== false);
     return (
         <DrawerAPIContextProvider>
             <div className={css['map-page']}>
                 {locations && (
                     <div className={css['map-page__map-container']}>
-                        <MapSection locations={locations} />
+                        <MapSection locations={mapLocations ?? []} />
                     </div>
                 )}
-                <Drawer locations={locations} />
+                <Drawer locations={mapLocations} />
             </div>
         </DrawerAPIContextProvider>
     );

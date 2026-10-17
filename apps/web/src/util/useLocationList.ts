@@ -53,10 +53,18 @@ export function useFilteredLocations({
     const processedSearchQuery = searchQuery.trim().toLowerCase();
 
     const filteredLocations = useMemo(() => {
+        if (locations === undefined) return undefined;
         const searchResults =
             processedSearchQuery.length === 0
                 ? (locations ?? [])
                 : fuse.search(processedSearchQuery).map((result) => result.item);
+
+        if (locationFilterQuery === 'on-campus') {
+            return searchResults.filter((location) => location.onCampus !== false);
+        }
+        if (locationFilterQuery === 'off-campus') {
+            return searchResults.filter((location) => location.onCampus === false);
+        }
 
         const locationFilterResults = new Set(fuse.search(locationFilterQuery).map((results) => results.item));
 

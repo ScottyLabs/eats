@@ -44,6 +44,7 @@ export enum LocationState {
     OPENS_SOON,
     CLOSED,
     CLOSED_LONG_TERM,
+    UNKNOWN,
 }
 
 export interface ILocation_FromAPI {
@@ -53,17 +54,19 @@ export interface ILocation_FromAPI {
     ratingsAvg: number | null;
     ratingsCount: number;
     shortDescription: string | null;
-    description: string;
+    description: string | null;
     url: string;
     /** Menu link */
     menu: string | null;
     location: string;
     coordinateLat: number | null;
     coordinateLng: number | null;
-    acceptsOnlineOrders: boolean;
-    times: ITimeRange[];
-    todaysSpecials: ISpecial[];
-    todaysSoups: ISpecial[];
+    acceptsOnlineOrders: boolean | null;
+    times: ITimeRange[] | null;
+    todaysSpecials: ISpecial[] | null;
+    todaysSoups: ISpecial[] | null;
+    onCampus?: boolean;
+    googlePlaceID?: string | null;
     /** The id provided on the dining services website */
     conceptId: string | null;
 }
@@ -85,11 +88,11 @@ interface ILocation_TimeStateData_NotPermanentlyClosed extends ILocation_TimeSta
     isOpen: boolean;
     minutesUntil: number;
     changesSoon: boolean;
-    locationState: Exclude<LocationState, LocationState.CLOSED_LONG_TERM>;
+    locationState: Exclude<LocationState, LocationState.CLOSED_LONG_TERM | LocationState.UNKNOWN>;
 }
 interface ILocation_TimeStatusData_PermanentlyClosed extends ILocation_TimeStatusData_Base {
     closedLongTerm: true;
-    locationState: LocationState.CLOSED_LONG_TERM;
+    locationState: LocationState.CLOSED_LONG_TERM | LocationState.UNKNOWN;
 }
 
 export type ILocation_TimeStatusData =

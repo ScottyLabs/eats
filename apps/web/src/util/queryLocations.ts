@@ -43,7 +43,13 @@ export function getStatusMessage(isOpen: boolean, interval: Interval): IStatusMe
 /**
  * changesSoon is if location closes/opens within 60 minutes
  */
-export function getLocationStatus(timeSlots: ITimeRangeList, now: DateTime): ILocation_TimeStatusData {
+export function getLocationStatus(timeSlots: ITimeRangeList | null, now: DateTime): ILocation_TimeStatusData {
+    if (timeSlots === null)
+        return {
+            statusMsg: { longStatus: 'Hours unavailable', shortStatus: ['Hours unavailable', ''] },
+            closedLongTerm: true,
+            locationState: LocationState.UNKNOWN,
+        };
     assert(isValidTimeSlotArray(timeSlots), `${JSON.stringify(timeSlots)} is invalid!`);
     const nextTimeSlot = getNextTimeSlot(timeSlots, now);
     if (nextTimeSlot === undefined)

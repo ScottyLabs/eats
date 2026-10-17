@@ -40,7 +40,7 @@ function ListBox({
     const [locationFilterQuery, setLocationFilterQuery] = useReducer<string, [string]>((_, newState) => {
         shouldAnimateCards.current = false;
         return newState;
-    }, '');
+    }, 'on-campus');
     const [sortBy, setSortBy] = useReducer<SortOption, [SortOption]>((_, newState) => {
         shouldAnimateCards.current = false;
         return newState;
@@ -70,7 +70,7 @@ function ListBox({
             <div className="list-controls-container" onClick={(ev) => ev.preventDefault()}>
                 <div className="list-controls-layout">
                     <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-                    <SelectLocation {...{ setLocationFilterQuery, locations }} />
+                    <SelectLocation {...{ setLocationFilterQuery, locationFilterQuery, locations }} />
                     <SelectSort
                         sortBy={sortBy}
                         setSortBy={(newSortBy) => {

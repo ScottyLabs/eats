@@ -82,6 +82,7 @@ paths:
                   type: object
                   properties:
                     times:
+                      nullable: true
                       type: array
                       items:
                         type: object
@@ -98,6 +99,7 @@ paths:
                           - start
                           - end
                     todaysSoups:
+                      nullable: true
                       type: array
                       items:
                         type: object
@@ -110,6 +112,7 @@ paths:
                           - name
                           - description
                     todaysSpecials:
+                      nullable: true
                       type: array
                       items:
                         type: object
@@ -143,6 +146,7 @@ paths:
                         - type: string
                         - type: "null"
                     description:
+                      nullable: true
                       type: string
                     url:
                       type: string
@@ -162,7 +166,15 @@ paths:
                         - type: number
                         - type: "null"
                     acceptsOnlineOrders:
+                      nullable: true
                       type: boolean
+                    onCampus:
+                      type: boolean
+                    googlePlaceID:
+                      nullable: true
+                      anyOf:
+                        - type: string
+                        - type: "null"
                     id:
                       type: string
                     conceptId:
@@ -185,6 +197,8 @@ paths:
                     - coordinateLat
                     - coordinateLng
                     - acceptsOnlineOrders
+                    - onCampus
+                    - googlePlaceID
                     - id
                     - conceptId
       operationId: getV2Locations

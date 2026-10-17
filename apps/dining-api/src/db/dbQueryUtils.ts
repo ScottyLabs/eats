@@ -1,6 +1,7 @@
-import { avg, count, gt, sql } from 'drizzle-orm';
+import { avg, count, gt, sql, or, inArray } from 'drizzle-orm';
 import {
     externalIdToInternalIdTable,
+    externalGoogleLocationsTable,
     emailTable,
     locationDataTable,
     overwritesTable,
@@ -88,7 +89,18 @@ export class QueryUtils {
                 timesTable,
                 and(eq(locationDataTable.id, timesTable.locationId), gte(timesTable.date, timeSearchCutoffStr)),
             )
-            .leftJoin(externalIdToInternalIdTable, eq(externalIdToInternalIdTable.internalId, locationDataTable.id));
+            .leftJoin(externalIdToInternalIdTable, eq(externalIdToInternalIdTable.internalId, locationDataTable.id))
+            .where(
+                or(
+                    eq(locationDataTable.onCampus, true),
+                    inArray(
+                        locationDataTable.googlePlaceID,
+                        this.db
+                            .select({ id: externalGoogleLocationsTable.googlePlaceID })
+                            .from(externalGoogleLocationsTable),
+                    ),
+                ),
+            );
 
         return locationData.reduce<
             Record<

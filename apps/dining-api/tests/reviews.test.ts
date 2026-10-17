@@ -18,6 +18,8 @@ import { Pool } from 'pg';
 const locationIn: ILocation = {
     name: 'dbTest',
     acceptsOnlineOrders: false,
+    onCampus: true,
+    googlePlaceID: null,
     conceptId: 1,
     coordinates: { lat: 1, lng: 10 },
     description: 'description',

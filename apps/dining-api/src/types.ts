@@ -21,11 +21,38 @@ export interface ILocation {
     today: IDate;
     todaysSpecials: ISpecial[] | undefined;
     todaysSoups: ISpecial[] | undefined;
+    onCampus: boolean;
+    googlePlaceID: string | null;
 }
 export interface ISpecial {
     title: string;
     description: string;
 }
+
+/** Google location will have incomplete data. TODO: add support for menu link (perhaps via api or scraping). */
+export type ExternalLocation = Omit<
+    ILocation,
+    | 'conceptId'
+    | 'description'
+    | 'menu'
+    | 'acceptsOnlineOrders'
+    | 'times'
+    | 'todaysSpecials'
+    | 'todaysSoups'
+    | 'onCampus'
+    | 'googlePlaceID'
+> & {
+    conceptId: null;
+    description: string | null;
+    menu: string | null;
+    acceptsOnlineOrders: null;
+    times: IFullTimeRange[] | null;
+    todaysSpecials: null;
+    todaysSoups: null;
+    onCampus: false;
+    googlePlaceID: string;
+    hoursValidThrough: string | null;
+};
 
 export interface IFullTimeRange {
     year: number;

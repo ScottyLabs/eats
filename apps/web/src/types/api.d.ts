@@ -249,26 +249,28 @@ export interface operations {
                             start: number;
                             /** @example 1771714397336 */
                             end: number;
-                        }[];
+                        }[] | null;
                         todaysSoups: {
                             name: string;
                             description: string;
-                        }[];
+                        }[] | null;
                         todaysSpecials: {
                             name: string;
                             description: string;
-                        }[];
+                        }[] | null;
                         name: (string | null) | null;
                         location: string;
                         ratingsAvg: (number | null) | null;
                         ratingsCount: number;
                         shortDescription: (string | null) | null;
-                        description: string;
+                        description: string | null;
                         url: string;
                         menu: (string | null) | null;
                         coordinateLat: (number | null) | null;
                         coordinateLng: (number | null) | null;
-                        acceptsOnlineOrders: boolean;
+                        acceptsOnlineOrders: boolean | null;
+                        onCampus: boolean;
+                        googlePlaceID: (string | null) | null;
                         id: string;
                         conceptId: (string | null) | null;
                     }[];

@@ -5,6 +5,10 @@ vi.mock('../src/utils/slack', () => {
 });
 
 describe('test diff checking', () => {
+    test('nullable location fields can be compared across refreshes', () => {
+        expect(getObjDiffs({ googlePlaceID: null }, { googlePlaceID: null })).toEqual([]);
+        expect(getObjDiffs({ menu: null }, { menu: 'https://example.com/menu' })).toHaveLength(1);
+    });
     test('basic', () => {
         const diffs = getObjDiffs([3], [2, 3]);
         expect(diffs).toContainEqual(expect.stringMatching(/inserted.*2/));

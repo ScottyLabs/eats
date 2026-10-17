@@ -121,6 +121,8 @@ export default class LocationBuilder {
             today: this.today,
             todaysSpecials: this.specials,
             todaysSoups: this.soups,
+            onCampus: true,
+            googlePlaceID: null,
         };
     }
 }

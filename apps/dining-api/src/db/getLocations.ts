@@ -31,12 +31,26 @@ export async function getAllLocationsFromDB(db: DBType, now: DateTime<true>) {
 
     // apply overrides, merge all time intervals, and add specials
     const finalLocationData = Object.entries(locationIdToData).map(([id, data]) => {
+        const { hoursValidThrough, ...location } = data;
+        const hoursKnown = data.onCampus || (hoursValidThrough !== null && hoursValidThrough >= now.toSQLDate());
+        const pointOverrides = idToPointOverrides[id];
+        const weeklyOverrides = idToWeeklyOverrides[id];
+        const hasTimeOverrides = pointOverrides !== undefined || weeklyOverrides !== undefined;
         return {
-            ...data,
+            ...location,
             ...generalOverrides[id], // this line only works because the override table has the same columns as the normal table
-            times: remapAndMergeTimeIntervals(
-                applyTimeOverrides(data.times, timeSearchCutoff, idToPointOverrides[id], idToWeeklyOverrides[id]),
-            ),
+            times:
+                hoursKnown || hasTimeOverrides
+                    ? remapAndMergeTimeIntervals(
+                          // Manual hours remain usable even when the imported schedule is unavailable or expired.
+                          applyTimeOverrides(
+                              hoursKnown ? data.times : [],
+                              timeSearchCutoff,
+                              pointOverrides,
+                              weeklyOverrides,
+                          ),
+                      )
+                    : null,
             // .map(
             //   (time) =>
             //     `${new Date(time.start).toLocaleString()}-${new Date(
@@ -45,8 +59,8 @@ export async function getAllLocationsFromDB(db: DBType, now: DateTime<true>) {
             // ),
             ratingsAvg: ratingsAvgs[id] ?? null,
             ratingsCount: ratingsCounts[id] ?? 0,
-            todaysSoups: specials[id]?.soups ?? [],
-            todaysSpecials: specials[id]?.specials ?? [],
+            todaysSoups: data.onCampus ? (specials[id]?.soups ?? []) : null,
+            todaysSpecials: data.onCampus ? (specials[id]?.specials ?? []) : null,
             reportCount: reportCounts[id] ?? 0,
         };
     });
