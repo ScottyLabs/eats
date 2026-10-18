@@ -12,7 +12,7 @@
     "test": "dotenv -e .env.test -- vitest --coverage",
     "eject": "vite eject",
     "coverage": "pnpm vitest --coverage",
-    "api-update": "pnpm openapi-typescript api.yaml -o src/types/api.d.ts"
+    "api-update": "echo \"consider change this after openapi-typescript adopts TS7\" && pnpm --package=openapi-typescript@7.13.0 --package=typescript@5.9.3 dlx openapi-typescript api.yaml -o src/types/api.d.ts"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
