@@ -29,7 +29,7 @@
             version = "1.0.0";
             src = ./.;
             fetcherVersion = 4;
-            hash = pkgs.lib.fakeHash;
+            hash = "sha256-tThP/M42h+kUTIhfI0p9do/ZVQN44jzF9ba4j1MFcMU=";
             pnpm = pkgs.pnpm_12;
           };
 
@@ -42,6 +42,7 @@
             pkgs.stdenv.mkDerivation {
               version = "0.1.0";
               src = ./.;
+              env = (scottylabs.mkLib pkgs).buildEnv;
               inherit
                 pname
                 pnpmDeps
@@ -53,7 +54,6 @@
                 pkgs.pnpm_12
                 pkgs.pnpmConfigHook
               ];
-              env = (scottylabs.mkLib pkgs).buildEnv;
             };
 
           apiBuildDir = mkPnpm {
@@ -69,6 +69,8 @@
               cp -r node_modules $out/node_modules
               cp package.json pnpm-workspace.yaml pnpm-lock.yaml $out/
               cp -r apps/dining-api $out/apps/dining-api
+              # drop symlinks to web node_modules, which is linked in root node_modules
+              find $out -xtype l -delete
               runHook postInstall
             '';
           };
