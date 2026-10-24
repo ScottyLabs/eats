@@ -9,6 +9,7 @@ const envSchema = z.object({
         })
         .or(z.literal('local')),
     VITE_POSTHOG_KEY: z.string().optional(),
+    VITE_POSTHOG_HOST: z.string().optional(),
     VITE_AUTO_GENERATED_MAPKITJS_TOKEN: z.string(),
 });
 

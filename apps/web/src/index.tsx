@@ -18,6 +18,9 @@ import { IsMobileContextProvider } from './contexts/IsMobileContext';
 import { UserLocationContextProvider } from './contexts/UserLocationContext';
 
 posthog.init(env.VITE_POSTHOG_KEY || '', {
+    api_host: env.VITE_POSTHOG_HOST || 'https://v.scottylabs.org',
+    // for ui_host, read more at https://docs.kennel.scottylabs.org/guides/features.html#posthog
+    ui_host: 'https://us.posthog.com',
     person_profiles: 'identified_only',
 });
 

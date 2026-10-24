@@ -23,6 +23,7 @@
         let
           pkgs = nixpkgs.legacyPackages.${system};
           nodejs_24 = pkgs.nodejs_24;
+          buildEnv = (scottylabs.mkLib pkgs).buildEnv;
 
           pnpmDeps = pkgs.fetchPnpmDeps {
             pname = "cmueats-monorepo";
@@ -38,11 +39,12 @@
               pname,
               buildPhase,
               installPhase,
+              extraEnv ? { },
             }:
             pkgs.stdenv.mkDerivation {
               version = "0.1.0";
               src = ./.;
-              env = (scottylabs.mkLib pkgs).buildEnv;
+              env = buildEnv // extraEnv;
               inherit
                 pname
                 pnpmDeps
@@ -78,6 +80,12 @@
         {
           web = mkPnpm {
             pname = "web";
+            # Vite only exposes VITE_* variables, but governance gives us
+            # them without the prefix. We rename them here instead
+            extraEnv = {
+              VITE_POSTHOG_KEY = buildEnv.POSTHOG_KEY or "";
+              VITE_POSTHOG_HOST = buildEnv.POSTHOG_HOST or "";
+            };
             buildPhase = ''
               runHook preBuild
               pnpm build:web
