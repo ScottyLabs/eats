@@ -15,6 +15,7 @@ import './ListPage.css';
 import { CardViewPreference } from '../util/storage';
 import Footer from '../components/Footer';
 import ListPageHeader from '../components/ListPageHeader';
+import { useSearchParams } from 'react-router-dom';
 import { useUserLocation } from '../contexts/UserLocationContext';
 
 function ListBox({
@@ -27,22 +28,28 @@ function ListBox({
     updateCardViewPreference: (id: string, newStatus: CardViewPreference) => void;
 }) {
     const { requestUserCoordinates } = useUserLocation();
-    const shouldAnimateCards = useRef(true);
+    const shouldAnimateCards = useRef(false);
     const { closeDrawer } = useDrawerAPIContext();
 
     // permanently cut out animation when user filters cards,
     // so we don't end up with some cards (but not others)
     // re-animating in when filter gets cleared
     const [searchQuery, setSearchQuery] = useReducer<string, [string]>((_, newState) => {
-        shouldAnimateCards.current = false;
         return newState;
     }, '');
-    const [locationFilterQuery, setLocationFilterQuery] = useReducer<string, [string]>((_, newState) => {
-        shouldAnimateCards.current = false;
-        return newState;
-    }, 'on-campus');
+
+    const [searchParams, setSearchParams] = useSearchParams();
+    const locationFilterQuery = searchParams.get('filter') ?? 'on-campus';
+    function setLocationFilterQuery(value: string) {
+
+        setSearchParams((previous) => {
+            const next = new URLSearchParams(previous);
+            next.set('filter', value);
+            return next;
+        });
+    }
+
     const [sortBy, setSortBy] = useReducer<SortOption, [SortOption]>((_, newState) => {
-        shouldAnimateCards.current = false;
         return newState;
     }, 'open');
 
