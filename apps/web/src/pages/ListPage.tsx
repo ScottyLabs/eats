@@ -10,13 +10,18 @@ import mikuBgUrl from '../assets/miku/miku.jpg';
 import EateryCardGrid from '../components/EateryCardGrid';
 import Drawer from '../components/Drawer';
 import { DrawerAPIContextProvider, useDrawerAPIContext } from '../contexts/DrawerAPIContext';
-import { LOCATION_DEFAULT, SORT_DEFAULT, type SortOption, useFilteredLocations, sortLocations } from '../util/useLocationList';
+import {
+    LOCATION_DEFAULT,
+    SORT_DEFAULT,
+    type SortOption,
+    useFilteredLocations,
+    sortLocations,
+} from '../util/useLocationList';
 import './ListPage.css';
 import { CardViewPreference } from '../util/storage';
 import Footer from '../components/Footer';
 import ListPageHeader from '../components/ListPageHeader';
 import { useUserLocation } from '../contexts/UserLocationContext';
-
 
 function ListBox({
     locations,
