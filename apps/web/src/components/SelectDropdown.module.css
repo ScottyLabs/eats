@@ -16,8 +16,8 @@
     box-shadow: 0 0 0 2px rgba(255, 255, 255, 0);
     transition:
         box-shadow 0.2s,
-        border-color 0.2s;
-        outline-color: 0.2s;
+        border-color 0.2s,
+        outline-color 0.2s;
     display: flex;
 
     svg {
@@ -29,7 +29,6 @@
 .icon-div--active {
     border-color: var(--hover-accent-color);
     background: color-mix(in srgb, var(--hover-accent-color) 20%, var(--input-bg));
-
 }
 
 .container:hover .icon-div {
