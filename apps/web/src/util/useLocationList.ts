@@ -4,6 +4,8 @@ import { ILocation_Full, LocationState } from '../types/locationTypes';
 import assert from './assert';
 
 export type SortOption = 'open' | 'distance' | 'rating-highest-open' | 'rating-highest' | 'rating-lowest';
+export const SORT_DEFAULT: SortOption = 'open';
+export const LOCATION_DEFAULT = '';
 
 const FUSE_OPTIONS: IFuseOptions<ILocation_Full> = {
     // keys to perform the search on
@@ -61,7 +63,7 @@ export function useFilteredLocations({
         const locationFilterResults = new Set(fuse.search(locationFilterQuery).map((results) => results.item));
 
         const intersection =
-            locationFilterQuery === ''
+            locationFilterQuery === LOCATION_DEFAULT
                 ? searchResults
                 : searchResults.filter((item) => locationFilterResults.has(item));
 

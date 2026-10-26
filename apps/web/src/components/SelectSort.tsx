@@ -1,6 +1,6 @@
 import { SortDesc } from 'lucide-react';
 import css from './SelectDropdown.module.css';
-import type { SortOption } from '../util/useLocationList';
+import { SORT_DEFAULT, type SortOption } from '../util/useLocationList';
 import clsx from 'clsx';
 
 type SelectSortProps = {
@@ -19,7 +19,7 @@ const sortOptionLabels: Record<SortOption, string> = {
 function SelectSort({ setSortBy, sortBy }: SelectSortProps) {
     return (
         <div className={css.container}>
-            <div className={clsx(css['icon-div'], sortBy !== 'open' && css['icon-div--active'])}>
+            <div className={clsx(css['icon-div'], sortBy !== SORT_DEFAULT && css['icon-div--active'])}>
                 <SortDesc />
             </div>
             <select value={sortBy} onChange={(e) => setSortBy(e.target.value as SortOption)} className={css.select}>

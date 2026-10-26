@@ -1,5 +1,6 @@
 import { Filter } from 'lucide-react';
 import { ILocation_Full } from '../types/locationTypes';
+import { LOCATION_DEFAULT } from '../util/useLocationList';
 import css from './SelectDropdown.module.css';
 import clsx from 'clsx';
 
@@ -20,7 +21,7 @@ function SelectLocation({ locationFilterQuery, setLocationFilterQuery, locations
 
     return (
         <div className={css.container}>
-            <div className={clsx(css['icon-div'], locationFilterQuery !== '' && css['icon-div--active'])}>
+            <div className={clsx(css['icon-div'], locationFilterQuery !== LOCATION_DEFAULT && css['icon-div--active'])}>
                 <Filter />
             </div>
             <select
@@ -28,7 +29,7 @@ function SelectLocation({ locationFilterQuery, setLocationFilterQuery, locations
                 onChange={(e) => setLocationFilterQuery(e.target.value)}
                 className={css.select}
             >
-                <option value="" key="All Buildings" label="All Buildings" />
+                <option value={LOCATION_DEFAULT} key="All Buildings" label="All Buildings" />
                 {deduplicatedBuildingNames.map((location) => (
                     <option key={location} value={location}>
                         {location}

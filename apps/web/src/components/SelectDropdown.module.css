@@ -7,7 +7,9 @@
     height: 100%;
     width: 100%;
     border-radius: 14px;
-    border: 1px solid transparent;
+    border: 2px solid transparent;
+    outline: 1px solid transparent;
+    outline-offset: -1px;
     box-sizing: border-box;
     background: var(--input-bg);
     color: var(--black-400);
@@ -15,29 +17,24 @@
     transition:
         box-shadow 0.2s,
         border-color 0.2s;
+        outline-color: 0.2s;
     display: flex;
+
     svg {
         height: 50%;
         margin: auto;
     }
 }
+
 .icon-div--active {
     border-color: var(--hover-accent-color);
-    background: color-mix(in srgb, var(--red-600) 20%, var(--input-bg));
-    border-width: 2px;
+    background: color-mix(in srgb, var(--hover-accent-color) 20%, var(--input-bg));
 
-    svg {
-        fill: currentColor;
-    }
 }
 
 .container:hover .icon-div {
-    transition:
-        box-shadow 0.5s,
-        border-color 0.5s;
     box-shadow: 0 0 40px var(--hover-accent-color);
-    border-color: var(--hover-accent-color);
-    outline: none;
+    outline-color: var(--hover-accent-color);
 }
 
 .select {
