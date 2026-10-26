@@ -10,12 +10,13 @@ import mikuBgUrl from '../assets/miku/miku.jpg';
 import EateryCardGrid from '../components/EateryCardGrid';
 import Drawer from '../components/Drawer';
 import { DrawerAPIContextProvider, useDrawerAPIContext } from '../contexts/DrawerAPIContext';
-import { type SortOption, useFilteredLocations, sortLocations } from '../util/useLocationList';
+import { LOCATION_DEFAULT, SORT_DEFAULT, type SortOption, useFilteredLocations, sortLocations } from '../util/useLocationList';
 import './ListPage.css';
 import { CardViewPreference } from '../util/storage';
 import Footer from '../components/Footer';
 import ListPageHeader from '../components/ListPageHeader';
 import { useUserLocation } from '../contexts/UserLocationContext';
+
 
 function ListBox({
     locations,
@@ -40,11 +41,11 @@ function ListBox({
     const [locationFilterQuery, setLocationFilterQuery] = useReducer<string, [string]>((_, newState) => {
         shouldAnimateCards.current = false;
         return newState;
-    }, '');
+    }, LOCATION_DEFAULT);
     const [sortBy, setSortBy] = useReducer<SortOption, [SortOption]>((_, newState) => {
         shouldAnimateCards.current = false;
         return newState;
-    }, 'open');
+    }, SORT_DEFAULT);
 
     const filteredLocations = useFilteredLocations({
         locations,
