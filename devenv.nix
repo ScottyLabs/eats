@@ -9,6 +9,7 @@
 
     kennel.sites.web = {
       spa = true;
+      customDomain = "cmueats.scottylabs.org";
     };
     kennel.services.api = {
       customDomain = "api.cmueats.scottylabs.org";
