@@ -38,6 +38,14 @@
         "useTabs": false,
         "singleQuote": false
       }
+    },
+    {
+      "files": ["*.toml"],
+      "options": {
+        "tabWidth": 2,
+        "useTabs": false,
+        "singleQuote": false
+      }
     }
   ]
 }

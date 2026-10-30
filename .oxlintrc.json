@@ -3,7 +3,6 @@
   "ignorePatterns": [
     "**/*.json",
     "**/*.rc",
-    "**/*.config.ts",
     "**/*.node.json",
     "**/.eslint*",
     ".vscode/*",

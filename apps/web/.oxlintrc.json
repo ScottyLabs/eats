@@ -3,7 +3,6 @@
   "ignorePatterns": [
     "**/*.json",
     "**/*.rc",
-    "**/*.config.ts",
     "**/*.node.json",
     "**/.eslint*",
     ".vscode/*",
@@ -57,5 +56,15 @@
     "react": {
       "version": "19.0"
     }
-  }
+  },
+  "overrides": [
+    {
+      "files": [
+        "**/*.config.ts"
+      ],
+      "rules": {
+        "no-console": "off"
+      }
+    }
+  ]
 }
