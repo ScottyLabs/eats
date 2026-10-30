@@ -6,7 +6,7 @@ import { DateTime } from 'luxon';
 import { notifySlack } from 'utils/slack';
 import { LocationsSchema } from './schemas';
 import { env } from 'env';
-import { eq } from 'drizzle-orm';
+import { eq, sql } from 'drizzle-orm';
 
 import { locationDataTable, reportsTable } from 'db/schema';
 import { fetchUserDetails } from './auth';
@@ -44,7 +44,7 @@ miscEndpoints.get(
     '/api/health',
     async ({ status }) => {
         try {
-            // TODO: await db`SELECT 1`           // or whatever a cheap ping looks like
+            await db.execute(sql`SELECT 1`);
             return status(200, 'ok');
         } catch {
             return status(503, 'unavailable');
