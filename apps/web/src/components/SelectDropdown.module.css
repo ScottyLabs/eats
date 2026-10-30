@@ -1,23 +1,34 @@
 .container {
     position: relative;
     aspect-ratio: 1/1;
+
+    &:hover .icon-div {
+        border-color: var(--hover-accent-color);
+        box-shadow:
+            inset 0 0 0 1px transparent,
+            0 0 40px var(--hover-accent-color);
+
+        &.icon-div--active {
+            box-shadow:
+                inset 0 0 0 1px var(--hover-accent-color),
+                0 0 40px var(--hover-accent-color);
+        }
+    }
 }
 
 .icon-div {
     height: 100%;
     width: 100%;
     border-radius: 14px;
-    border: 2px solid transparent;
-    outline: 1px solid transparent;
-    outline-offset: -1px;
+    border: 1px solid transparent;
     box-sizing: border-box;
     background: var(--input-bg);
     color: var(--black-400);
-    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0);
+    box-shadow: inset 0 0 0 1px transparent;
     transition:
         box-shadow 0.2s,
         border-color 0.2s,
-        outline-color 0.2s;
+        background-color 0.2s;
     display: flex;
 
     svg {
@@ -25,15 +36,11 @@
         margin: auto;
     }
 }
-
 .icon-div--active {
     border-color: var(--hover-accent-color);
     background: color-mix(in srgb, var(--hover-accent-color) 20%, var(--input-bg));
-}
-
-.container:hover .icon-div {
-    box-shadow: 0 0 40px var(--hover-accent-color);
-    outline-color: var(--hover-accent-color);
+    /* we use box-shadow here to prevent the border from squeezing the icon */
+    box-shadow: inset 0 0 0 1px var(--hover-accent-color);
 }
 
 .select {
