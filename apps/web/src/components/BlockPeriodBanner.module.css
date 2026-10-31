@@ -1,0 +1,160 @@
+
+.block-period-banner {
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+
+    margin: 12px 32px;
+    padding: 12px 20px;
+
+    border-radius: 8px;
+
+    background-color: var(--black-1000);
+}
+
+.block-period-banner__header {
+    display: grid;
+    grid-template-columns: auto auto 24px;
+    align-items: center;
+    justify-content: start;
+    column-gap: 16px;
+}
+
+.block-period-banner__header-period {
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+}
+
+.block-period-banner__label {
+    font-weight: 500;
+    color: var(--black-500);
+}
+
+.block-period-banner__name {
+    font-weight: 500;
+    margin-left: 4px;
+}
+
+.block-period-banner__time {
+    font-weight: 500;
+    color: var(--black-500);
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+.block-period-banner__expand-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 24px;
+    height: 24px;
+
+    padding: 0;
+    margin: 0;
+
+    border: none;
+    background: transparent;
+
+    color: var(--black-500);
+    font-size: 20px;
+    line-height: 1;
+
+    cursor: pointer;
+}
+
+.block-period-banner__expand-button:hover {
+    color: white;
+}
+
+.block-period-banner__dropdown {
+    position: absolute;
+
+    top: 100%;
+    left: 0;
+
+    width: 100%;
+    box-sizing: border-box;
+
+    padding: 12px 20px;
+
+    border-top: 1px solid var(--black-500);
+    border-radius: 0 0 8px 8px;
+
+    background-color: var(--black-1000);
+
+    box-shadow: 0 4px 12px rgb(0 0 0 / 30%);
+
+    z-index: 100;
+}
+
+.block-period-banner__period {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr) auto;
+    align-items: center;
+    gap: 16px;
+
+    padding: 5px 0;
+
+    font-size: 14px;
+    font-weight: 500;
+
+    color: var(--black-500);
+}
+
+.block-period-banner__period-name,
+.block-period-banner__period-time {
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+.block-period-banner__period-time {
+    text-align: left;
+}
+
+.block-period-banner__price {
+    justify-self: end;
+
+    padding: 3px 9px;
+
+    border: 1px solid var(--black-500);
+    border-radius: 6px;
+
+    font-size: 14px;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.block-period-banner__period--current {
+    font-weight: 500;
+    color: white;
+}
+
+.block-period-banner__period--current .block-period-banner__price {
+    color: white;
+}
+
+.block-period-banner__expand-button--hidden {
+    visibility: hidden;
+}
+
+.block-period-banner--expanded {
+    filter: drop-shadow(0 0 5px var(--hover-accent-color));
+    animation: banner-glow 1.5s ease-in-out infinite;
+}
+
+@keyframes banner-glow {
+    0% {
+        filter: drop-shadow(0 0 5px var(--hover-accent-color));
+    }
+
+    50% {
+        filter: drop-shadow(0 0 20px var(--hover-accent-color));
+    }
+
+    100% {
+        filter: drop-shadow(0 0 5px var(--hover-accent-color));
+    }
+}

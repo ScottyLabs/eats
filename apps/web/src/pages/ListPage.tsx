@@ -22,6 +22,9 @@ import { CardViewPreference } from '../util/storage';
 import Footer from '../components/Footer';
 import ListPageHeader from '../components/ListPageHeader';
 import { useUserLocation } from '../contexts/UserLocationContext';
+import BlockPeriodBanner from '../components/BlockPeriodBanner';
+import { useCurrentTime } from '../contexts/NowContext';
+import { getBlockPeriod } from '../util/blockPeriod';
 
 function ListBox({
     locations,
@@ -35,6 +38,8 @@ function ListBox({
     const { requestUserCoordinates } = useUserLocation();
     const shouldAnimateCards = useRef(true);
     const { closeDrawer } = useDrawerAPIContext();
+    const now = useCurrentTime();
+    const blockPeriod = getBlockPeriod(now);
 
     // permanently cut out animation when user filters cards,
     // so we don't end up with some cards (but not others)
@@ -74,6 +79,8 @@ function ListBox({
         >
             <ListPageHeader />
             <div className="list-controls-container" onClick={(ev) => ev.preventDefault()}>
+                <BlockPeriodBanner blockPeriod={blockPeriod} />
+                
                 <div className="list-controls-layout">
                     <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
                     <SelectLocation {...{ locationFilterQuery, setLocationFilterQuery, locations }} />
