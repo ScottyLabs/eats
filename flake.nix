@@ -30,7 +30,7 @@
             version = "1.0.0";
             src = ./.;
             fetcherVersion = 4;
-            hash = "sha256-tThP/M42h+kUTIhfI0p9do/ZVQN44jzF9ba4j1MFcMU=";
+            hash = "sha256-lpKN8Y4JQcEh2CFRX4nYq3rVZ0gcV+oYrmpOH64rRgk=";
             pnpm = pkgs.pnpm_12;
           };
 
@@ -99,8 +99,7 @@
             '';
           };
 
-          # after building, runs migration
-          # and then starts the api server
+          # after building, runs migration and then starts the api server
           api = pkgs.writeShellApplication {
             name = "api";
             runtimeInputs = [ nodejs_24 ];
