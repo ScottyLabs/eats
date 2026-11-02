@@ -1,0 +1,187 @@
+.dialog {
+    /* Leave room for the fading glow on every side of the viewport. */
+    --promotion-viewport-space: 64px;
+    width: fit-content;
+    max-width: calc(100vw - var(--promotion-viewport-space));
+    max-height: calc(100dvh - var(--promotion-viewport-space));
+    margin: auto;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: var(--text-primary);
+    overflow: visible;
+
+    &::backdrop {
+        background: rgba(0, 0, 0, 0.65);
+    }
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 2;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.75);
+    color: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+
+    &:hover {
+        background: rgba(0, 0, 0, 0.9);
+    }
+
+    &:focus-visible {
+        outline: 2px solid white;
+        outline-offset: 2px;
+    }
+}
+
+.graphic {
+    display: block;
+    width: auto;
+    height: auto;
+    max-width: min(680px, calc(100vw - var(--promotion-viewport-space)));
+    max-height: calc(100dvh - var(--promotion-viewport-space));
+    border-radius: inherit;
+}
+
+.error {
+    display: block;
+    box-sizing: border-box;
+    width: min(360px, calc(100vw - var(--promotion-viewport-space)));
+    max-height: calc(100dvh - var(--promotion-viewport-space));
+    padding: 72px 24px 24px;
+    overflow-y: auto;
+    border-radius: inherit;
+    background: var(--black-1000);
+    line-height: 1.5;
+}
+
+@property --promotion-shift-a {
+    syntax: '<percentage>';
+    inherits: true;
+    initial-value: 0%;
+}
+
+@property --promotion-shift-b {
+    syntax: '<percentage>';
+    inherits: true;
+    initial-value: 100%;
+}
+
+@property --promotion-shift-c {
+    syntax: '<percentage>';
+    inherits: true;
+    initial-value: 25%;
+}
+
+@property --promotion-patch-opacity {
+    syntax: '<number>';
+    inherits: true;
+    initial-value: 0.4;
+}
+
+/* The frame animates gradient positions and opacity; the halo inherits them. */
+.frame {
+    width: max-content;
+    max-width: 100%;
+    --promotion-colors:
+        radial-gradient(
+            ellipse at var(--promotion-shift-a) var(--promotion-shift-b),
+            rgb(255 80 125 / var(--promotion-patch-opacity)) 0% 12%,
+            transparent 55%
+        ),
+        radial-gradient(ellipse at var(--promotion-shift-b) var(--promotion-shift-c), #ffb94f 0% 8%, transparent 48%),
+        radial-gradient(
+            ellipse at calc(100% - var(--promotion-shift-c)) var(--promotion-shift-a),
+            rgb(105 255 165 / calc(1 - var(--promotion-patch-opacity))) 0% 10%,
+            transparent 55%
+        ),
+        radial-gradient(
+            ellipse at var(--promotion-shift-c) calc(100% - var(--promotion-shift-b)),
+            #43dcff 0% 8%,
+            transparent 50%
+        ),
+        radial-gradient(
+            ellipse at calc(100% - var(--promotion-shift-a)) calc(100% - var(--promotion-shift-c)),
+            #ee6fff 0% 12%,
+            transparent 58%
+        ),
+        linear-gradient(135deg, #755bff, #536aff 45%, #e963c4);
+
+    animation:
+        promotion-drift-a 7.3s ease-in-out infinite alternate,
+        promotion-drift-b 11.7s ease-in-out infinite alternate,
+        promotion-drift-c 17.9s ease-in-out infinite alternate,
+        promotion-patch-fade 5.3s ease-in-out infinite alternate;
+    position: relative;
+    isolation: isolate;
+    border-radius: 12px;
+}
+
+.glow {
+    position: absolute;
+    inset: -6px;
+    z-index: -1;
+    border-radius: inherit;
+    pointer-events: none;
+    /* A filled gradient behind the image gives the shadow a denser, fading edge. */
+    background: var(--promotion-colors);
+    filter: blur(12px);
+    animation: promotion-rainbow-glow-pulse 4.7s ease-in-out infinite;
+}
+
+@keyframes promotion-drift-a {
+    from {
+        --promotion-shift-a: 0%;
+    }
+    to {
+        --promotion-shift-a: 100%;
+    }
+}
+
+@keyframes promotion-drift-b {
+    from {
+        --promotion-shift-b: 100%;
+    }
+    to {
+        --promotion-shift-b: 0%;
+    }
+}
+
+@keyframes promotion-drift-c {
+    from {
+        --promotion-shift-c: 25%;
+    }
+    45% {
+        --promotion-shift-c: 100%;
+    }
+    to {
+        --promotion-shift-c: 5%;
+    }
+}
+
+@keyframes promotion-patch-fade {
+    from {
+        --promotion-patch-opacity: 0.4;
+    }
+    to {
+        --promotion-patch-opacity: 0.9;
+    }
+}
+
+@keyframes promotion-rainbow-glow-pulse {
+    0%,
+    100% {
+        opacity: 0.5;
+    }
+    50% {
+        opacity: 0.7;
+    }
+}

@@ -1,6 +1,4 @@
 .card {
-    --card-glow-animation: glow-animation 1.5s ease 0s infinite;
-
     box-sizing: border-box;
     height: 100%;
 
@@ -15,7 +13,7 @@
     cursor: pointer;
 
     &:hover {
-        animation: var(--card-glow-animation);
+        animation: glow-animation 1.5s ease infinite;
     }
 
     position: relative;
@@ -24,9 +22,6 @@
 }
 
 .card-active {
-    /* box-shadow:
-        0 0 2px var(--hover-accent-color),
-        0 0 25px var(--hover-accent-color); */
     outline: 2px solid white;
 }
 
@@ -66,25 +61,11 @@
 }
 
 @keyframes glow-animation {
-    0% {
-        box-shadow: 0 0 5px var(--hover-accent-color);
-    }
-    50% {
-        box-shadow: 0 0 20px var(--hover-accent-color);
-    }
+    0%,
     100% {
         box-shadow: 0 0 5px var(--hover-accent-color);
     }
-}
-
-@keyframes glow-animation-reverse {
-    0% {
-        box-shadow: 0 0 20px var(--hover-accent-color);
-    }
     50% {
-        box-shadow: 0 0 5px var(--hover-accent-color);
-    }
-    100% {
         box-shadow: 0 0 20px var(--hover-accent-color);
     }
 }

@@ -1,6 +1,18 @@
 import { t } from 'elysia';
 
+export const PromotionSchema = t.Object({
+    id: t.Integer(),
+    placeId: t.String(),
+    promotionTagText: t.Nullable(t.String()),
+    promotionText: t.Nullable(t.String()),
+    promotionGraphic: t.Nullable(t.String()),
+    startsAt: t.Nullable(t.String({ format: 'date-time' })),
+    endsAt: t.Nullable(t.String({ format: 'date-time' })),
+    status: t.Union([t.Literal('draft'), t.Literal('published'), t.Literal('archived')]),
+});
+
 export const LocationSchema = t.Object({
+    promotions: t.Array(PromotionSchema),
     times: t.Nullable(
         t.Array(
             t.Object({

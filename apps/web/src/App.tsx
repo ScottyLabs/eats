@@ -17,6 +17,7 @@ import { useUserLocation } from './contexts/UserLocationContext';
 import { getLocationDistanceFromUser } from './util/geoDistance';
 import AuthBanner from './components/banners/AuthBanner';
 import AlertBanner from './components/banners/OfflineAlertBanner';
+import { getActivePromotions } from './util/promotions';
 
 export default function App() {
     const now = useCurrentTime();
@@ -54,6 +55,7 @@ export default function App() {
         if (!locations || !distanceFromUserMetersByLocationId) return undefined;
         return locations.map((location) => ({
             ...location,
+            promotions: getActivePromotions(location.promotions, now.toMillis()),
             ...getLocationStatus(location.times, now),
             cardViewPreference:
                 cardViewPreferences[location.id] ?? cardViewPreferences[location.conceptId ?? ''] ?? 'normal', // check for conceptid preference as well, fallback

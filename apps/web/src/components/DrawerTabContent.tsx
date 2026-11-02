@@ -6,12 +6,11 @@ import { useDrawerTabsContext } from '../contexts/DrawerTabsContext';
 import ReviewPage from './ReviewPage';
 import { useDrawerAPIContext } from '../contexts/DrawerAPIContext';
 
-function DrawerTabContent() {
+function DrawerTabContent({ onOpenPromotion }: { onOpenPromotion: (promotionId: number) => void }) {
     const now = useCurrentTime();
     const dayOffsetFromSunday = now.weekday % 7;
     const daysStartingFromSunday = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    const drawerContext = useDrawerTabsContext();
-    const { location } = drawerContext;
+    const { location } = useDrawerTabsContext();
     const { activeTab } = useDrawerAPIContext();
 
     const timeSlots = location.times === null ? null : next7DaysReadableString(location.times, now);
@@ -20,7 +19,7 @@ function DrawerTabContent() {
     const menu = location.menu ?? '';
 
     function renderDescription() {
-        return <div className={css.description}>{drawerContext.location.description}</div>;
+        return <div className={css.description}>{location.description}</div>;
     }
 
     function renderHours() {
@@ -65,6 +64,28 @@ function DrawerTabContent() {
         );
     }
 
+    function renderPromotions() {
+        return location.promotions.map((promotion) => {
+            const text = promotion.promotionText || promotion.promotionTagText;
+            if (!text && !promotion.promotionGraphic) return null;
+            return (
+                <div className={css.promotion} key={promotion.id}>
+                    {text && <p className={css['promotion-text']}>{text}</p>}
+                    {promotion.promotionGraphic && (
+                        <button
+                            type="button"
+                            className={css['promotion-button']}
+                            aria-haspopup="dialog"
+                            onClick={() => onOpenPromotion(promotion.id)}
+                        >
+                            View promotion
+                        </button>
+                    )}
+                </div>
+            );
+        });
+    }
+
     function renderMenu() {
         return (
             <>
@@ -102,6 +123,7 @@ function DrawerTabContent() {
                 <>
                     {renderDescription()}
                     {renderHours()}
+                    {renderPromotions()}
                     {location.onCampus === false && location.googlePlaceID && (
                         <div className={css.attribution}>
                             View in{' '}

@@ -81,6 +81,44 @@ paths:
                 items:
                   type: object
                   properties:
+                    promotions:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          placeId:
+                            type: string
+                          promotionTagText:
+                            type: string
+                            nullable: true
+                          promotionText:
+                            type: string
+                            nullable: true
+                          promotionGraphic:
+                            type: string
+                            nullable: true
+                          startsAt:
+                            type: string
+                            format: date-time
+                            nullable: true
+                          endsAt:
+                            type: string
+                            format: date-time
+                            nullable: true
+                          status:
+                            type: string
+                            enum: [draft, published, archived]
+                        required:
+                          - id
+                          - placeId
+                          - promotionTagText
+                          - promotionText
+                          - promotionGraphic
+                          - startsAt
+                          - endsAt
+                          - status
                     times:
                       nullable: true
                       type: array
@@ -183,6 +221,7 @@ paths:
                         - type: string
                         - type: "null"
                   required:
+                    - promotions
                     - times
                     - todaysSoups
                     - todaysSpecials

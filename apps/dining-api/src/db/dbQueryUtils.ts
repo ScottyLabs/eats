@@ -1,4 +1,4 @@
-import { avg, count, gt, sql, or, inArray } from 'drizzle-orm';
+import { avg, count, gt, sql, or, inArray, isNull, lte } from 'drizzle-orm';
 import {
     externalIdToInternalIdTable,
     externalGoogleLocationsTable,
@@ -11,6 +11,7 @@ import {
     timesTable,
     weeklyTimeOverwritesTable,
     reportsTable,
+    promotionsTable,
 } from './schema';
 
 import { DBType } from './db';
@@ -32,6 +33,26 @@ export class QueryUtils {
     db: DBType;
     constructor(db: DBType) {
         this.db = db;
+    }
+
+    async getActivePromotions(now: DateTime<true>) {
+        const instant = now.toJSDate();
+        const promotions = await this.db
+            .select()
+            .from(promotionsTable)
+            .where(
+                and(
+                    eq(promotionsTable.status, 'published'),
+                    or(isNull(promotionsTable.startsAt), lte(promotionsTable.startsAt, instant)),
+                    or(isNull(promotionsTable.endsAt), gt(promotionsTable.endsAt, instant)),
+                ),
+            )
+            .orderBy(promotionsTable.id);
+
+        return promotions.reduce<Record<string, typeof promotions>>((byPlace, promotion) => {
+            (byPlace[promotion.placeId] ??= []).push(promotion);
+            return byPlace;
+        }, {});
     }
 
     async getReportsAfter(startTime: DateTime, locationId?: string) {

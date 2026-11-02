@@ -15,6 +15,7 @@ export async function getAllLocationsFromDB(db: DBType, now: DateTime<true>) {
 
     const DB = new QueryUtils(db);
     const locationIdToData = await DB.getLocationIdToDataMap(timeSearchCutoff.toSQLDate());
+    const promotions = await DB.getActivePromotions(now);
     const specials = await DB.getSpecials(now.toSQLDate());
     const generalOverrides = await DB.getGeneralOverrides();
     const { idToPointOverrides, idToWeeklyOverrides } = await DB.getTimeOverrides(timeSearchCutoff.toSQLDate());
@@ -57,6 +58,11 @@ export async function getAllLocationsFromDB(db: DBType, now: DateTime<true>) {
             //       time.end
             //     ).toLocaleString()}`
             // ),
+            promotions: (promotions[id] ?? []).map((promotion) => ({
+                ...promotion,
+                startsAt: promotion.startsAt?.toISOString() ?? null,
+                endsAt: promotion.endsAt?.toISOString() ?? null,
+            })),
             ratingsAvg: ratingsAvgs[id] ?? null,
             ratingsCount: ratingsCounts[id] ?? 0,
             todaysSoups: data.onCampus ? (specials[id]?.soups ?? []) : null,

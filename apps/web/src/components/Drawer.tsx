@@ -10,6 +10,8 @@ import { ILocation_Full } from '../types/locationTypes';
 import { useWidth, WidthContext } from '../contexts/ScreenWidth';
 import BottomSheet from './BottomSheet';
 import { useIsMobileContext } from '../contexts/IsMobileContext';
+import PromotionPopup from './PromotionPopup';
+import { usePromotionPopup } from '../util/usePromotionPopup';
 
 function Drawer({ locations }: { locations: ILocation_Full[] | undefined }) {
     const drawerRef = useRef<HTMLDivElement | null>(null);
@@ -17,10 +19,15 @@ function Drawer({ locations }: { locations: ILocation_Full[] | undefined }) {
     const pickedLocation = locations?.find((loc) => loc.id === selectedId);
     const drawerWidth = useWidth(drawerRef, pickedLocation !== undefined);
     const isMobile = useIsMobileContext();
+    const { promotion, openPopup, closePopup } = usePromotionPopup(
+        pickedLocation?.id ?? null,
+        pickedLocation?.promotions ?? [],
+    );
+    const popupOpen = promotion !== undefined;
 
     // `esc` to close the drawer
     useEffect(() => {
-        if (selectedId === null) return () => {};
+        if (selectedId === null || popupOpen) return;
 
         function handleKeyDown(event: KeyboardEvent) {
             if (event.key !== 'Escape') return;
@@ -35,25 +42,26 @@ function Drawer({ locations }: { locations: ILocation_Full[] | undefined }) {
 
         document.addEventListener('keydown', handleKeyDown);
         return () => document.removeEventListener('keydown', handleKeyDown);
-    }, [selectedId, closeDrawer]);
+    }, [selectedId, closeDrawer, popupOpen]);
 
     // reset scroll when selected location changes
     useEffect(() => {
         drawerRef.current?.scrollTo({ top: 0, behavior: 'instant' });
     }, [pickedLocation?.id]);
     if (pickedLocation === undefined) return null;
-    return isMobile ? (
+    const content = (
+        <WidthContext.Provider value={drawerWidth}>
+            <DrawerTabsContextProvider location={pickedLocation} key={pickedLocation.id}>
+                <DrawerHeader />
+                <DrawerTabNav />
+                <DrawerTabContent onOpenPromotion={openPopup} />
+            </DrawerTabsContextProvider>
+        </WidthContext.Provider>
+    );
+    const drawer = isMobile ? (
         <BottomSheet onHide={closeDrawer}>
             <div className={css['drawer-box-mobile']} ref={drawerRef}>
-                {pickedLocation !== undefined && (
-                    <WidthContext.Provider value={drawerWidth}>
-                        <DrawerTabsContextProvider location={pickedLocation} key={pickedLocation.id}>
-                            <DrawerHeader />
-                            <DrawerTabNav />
-                            <DrawerTabContent />
-                        </DrawerTabsContextProvider>
-                    </WidthContext.Provider>
-                )}
+                {content}
             </div>
         </BottomSheet>
     ) : (
@@ -65,15 +73,23 @@ function Drawer({ locations }: { locations: ILocation_Full[] | undefined }) {
                 className={css['drawer-box']}
                 ref={drawerRef}
             >
-                <WidthContext.Provider value={drawerWidth}>
-                    <DrawerTabsContextProvider location={pickedLocation} key={pickedLocation.id}>
-                        <DrawerHeader />
-                        <DrawerTabNav />
-                        <DrawerTabContent />
-                    </DrawerTabsContextProvider>
-                </WidthContext.Provider>
+                {content}
             </motion.div>
         </AnimatePresence>
+    );
+    return (
+        <>
+            {drawer}
+            {promotion?.promotionGraphic && (
+                <PromotionPopup
+                    key={`${promotion.id}:${promotion.promotionGraphic}`}
+                    graphic={promotion.promotionGraphic}
+                    alt={promotion.promotionText ?? promotion.promotionTagText ?? `${pickedLocation.name} promotion`}
+                    locationName={pickedLocation.name}
+                    onClose={closePopup}
+                />
+            )}
+        </>
     );
 }
 

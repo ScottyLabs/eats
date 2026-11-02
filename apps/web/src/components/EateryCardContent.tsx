@@ -31,10 +31,23 @@ function EateryCardContent({ location }: { location: ILocation_Full }) {
 
     return (
         <div className={css['card-content-container']}>
-            <h3 className={css['location-name-text']} style={isPinned ? { color: 'var(--yellow-300)' } : {}}>
-                {isPinned && <Pin size={16} />}
-                <span>{theme === 'april-fools' ? 'El Gallo De Oro' : name}</span>
-            </h3>
+            <div className={css['name-row']}>
+                <h3 className={css['location-name-text']} style={isPinned ? { color: 'var(--yellow-300)' } : {}}>
+                    {isPinned && <Pin size={16} />}
+                    <span>{theme === 'april-fools' ? 'El Gallo De Oro' : name}</span>
+                </h3>
+                {location.promotions.some((promotion) => promotion.promotionTagText) && (
+                    <div className={css['promotion-tags']}>
+                        {location.promotions.map((promotion) =>
+                            promotion.promotionTagText ? (
+                                <span className={css['promotion-tag']} key={promotion.id}>
+                                    {promotion.promotionTagText}
+                                </span>
+                            ) : null,
+                        )}
+                    </div>
+                )}
+            </div>
 
             <div className={css['lower-bar']}>
                 {isGallo && interval.isValid ? (

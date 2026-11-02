@@ -244,6 +244,16 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
+                        promotions: {
+                            id: number;
+                            placeId: string;
+                            promotionTagText: string | null;
+                            promotionText: string | null;
+                            promotionGraphic: string | null;
+                            startsAt: string | null;
+                            endsAt: string | null;
+                            status: "draft" | "published" | "archived";
+                        }[];
                         times: {
                             /** @example 1771714397336 */
                             start: number;

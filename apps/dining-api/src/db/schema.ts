@@ -52,6 +52,25 @@ export const locationDataTable = pgTable('location_data', {
     hoursValidThrough: date('hours_valid_through'),
 });
 
+export const promotionStatus = pgEnum('promotion_status', ['draft', 'published', 'archived']);
+
+// Manually maintained
+export const promotionsTable = pgTable(
+    'promotions',
+    {
+        id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
+        placeId: text('place_id').notNull()
+            .references(() => locationDataTable.id, { onDelete: 'cascade' }),
+        promotionTagText: text('promotion_tag_text'),
+        promotionText: text('promotion_text'),
+        promotionGraphic: text('promotion_graphic'),
+        startsAt: timestamp('starts_at', { withTimezone: true, mode: 'date' }),
+        endsAt: timestamp('ends_at', { withTimezone: true, mode: 'date' }),
+        status: promotionStatus('status').notNull(),
+    },
+    (table) => [index('promotions_place_id').on(table.placeId)],
+);
+
 // manually maintained :skull:
 export const externalGoogleLocationsTable = pgTable('external_google_locations', {
     googlePlaceID: text('google_place_id').primaryKey(),

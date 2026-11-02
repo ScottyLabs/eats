@@ -6,6 +6,7 @@ import { renderHook } from '@testing-library/react';
 function makeLocation(overrides: Partial<ILocation_Full> & { name: string }): ILocation_Full {
     return {
         id: overrides.name,
+        promotions: [],
         ratingsAvg: null,
         ratingsCount: 0,
         shortDescription: null,

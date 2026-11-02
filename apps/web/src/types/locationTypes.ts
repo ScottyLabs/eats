@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 
+import type { paths } from './api';
 import { CardViewPreference } from '../util/storage';
 
 /** Note that everything being exported here is readonly */
@@ -47,10 +48,14 @@ export enum LocationState {
     UNKNOWN,
 }
 
+export type Promotion =
+    paths['/v2/locations']['get']['responses'][200]['content']['application/json'][number]['promotions'][number];
+
 export interface ILocation_FromAPI {
     /** unique identifier for this location */
     id: string;
     name: string;
+    promotions: Promotion[];
     ratingsAvg: number | null;
     ratingsCount: number;
     shortDescription: string | null;

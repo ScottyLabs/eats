@@ -762,6 +762,7 @@ const locations = [
     },
 ].map((loc) => ({
     ...loc,
+    promotions: [],
     coordinateLat: loc.coordinates.lat,
     coordinateLng: loc.coordinates.lng,
     times: loc.times.map(({ start, end }) => ({ start: toTimeSlotThisWeek(start), end: toTimeSlotThisWeek(end) })),
