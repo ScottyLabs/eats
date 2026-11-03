@@ -66,31 +66,3 @@ We get the entire list of locations from `DINING_URL`, fetch location specifics 
 ## Random notes
 
 the "cheerio" package is pinned at version "1.0.0-rc.12" because newer versions seem to be incompatible with jest.
-
-
-## External Google locations
-
-Set `GOOGLE_PLACES_API_KEY` in `.env`.
-
-`description` is optional & is the blurb from the link in google maps.
-
-`refreshDB` reads this manually maintained table, importing Google Place Details in batches of three.
-
-External locations set `conceptId`, menu, online-ordering support, daily soups, and daily specials as `null` unless someone volunteers to maintain/comes up with a fancy scraper.
-
-## Manually managed promotions
-
-Edit `promotions` using DBeaver or Drizzle Studio. `place_id` references the internal
-`location_data.id`, not a Google Place ID. A place may have multiple promotions.
-The tag text, full text, public graphic URL, and start/end timestamps are nullable.
-New rows default to `draft`; set `status` to `published` to make an offer visible, or
-`archived` to hide it. There are no created/updated timestamps.
-
-`GET /v2/locations` includes a `promotions` array (empty when none are active).
-Published promotions are active at or after `starts_at` and strictly before `ends_at`;
-null dates impose no boundary. Dates in the response are UTC ISO strings. Nullable
-content is returned as stored. Graphics are stored externally, not as database blobs.
-Location imports preserve promotions; deleting the parent location cascades to its promotions.
-
-Apply `0012_promotions.sql` through the existing migration workflow before deploying
-the updated API. This migration needs no data backfill.
