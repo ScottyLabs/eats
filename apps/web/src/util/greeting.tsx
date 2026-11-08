@@ -36,7 +36,7 @@ const afternoon = [
     'Satisfy your midday hunger!',
     'Craving something savory for lunch?',
     "Midday munchies? We've got you covered!",
-    'Halfway through the day—time for a lunch break!',
+    'Halfway through the day, time for a lunch break!',
 ];
 const afternoonShort = [
     'Have a good afternoon!',

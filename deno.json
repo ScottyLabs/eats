@@ -1,0 +1,13 @@
+{
+  "nodeModulesDir": "auto",
+  "unstable": ["sloppy-imports"],
+  "workspace": ["./apps/web", "./apps/dining-api"],
+  "tasks": {
+    "test": "deno task --cwd apps/web test --run && deno task --cwd apps/dining-api test --run",
+    "typecheck": "deno task --cwd apps/web typecheck && deno task --cwd apps/dining-api typecheck"
+  },
+  "test": {
+    "exclude": ["apps"]
+  },
+  "exclude": [".scottylabs", "**/dist", "**/coverage"]
+}

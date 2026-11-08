@@ -5,24 +5,10 @@ result.json
 dist/
 build/
 
-# Nix / devenv
-.devenv/
+# Nix
 .pre-commit-config.yaml
-
-# AI
-.mcp.json
-.claude
 
 # misc
 .DS_Store
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
 .secrets
-.vscode
 coverage
-
-# for testing only
-/public/example-response.json

@@ -1,0 +1,13 @@
+{
+  "imports": {
+    "env": "./src/env.ts",
+    "reload": "./src/reload.ts",
+    "types": "./src/types.ts",
+    "containers/": "./src/containers/",
+    "db/": "./src/db/",
+    "endpoints/": "./src/endpoints/",
+    "overwrites/": "./src/overwrites/",
+    "parser/": "./src/parser/",
+    "utils/": "./src/utils/"
+  }
+}

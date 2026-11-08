@@ -1,18 +1,18 @@
 import { z } from 'zod';
 
 const envSchema = z.object({
-    VITE_API_URL: z
+    PUBLIC_API_URL: z
         .url()
         .transform((url) => {
             const urlObj = new URL(url);
             return `${urlObj.protocol}//${urlObj.host}`;
         })
-        .or(z.literal('local')),
-    VITE_POSTHOG_KEY: z.string().optional(),
-    VITE_POSTHOG_HOST: z.string().optional(),
-    VITE_AUTO_GENERATED_MAPKITJS_TOKEN: z.string(),
+        .or(z.literal('local'))
+        .default(''),
+    PUBLIC_POSTHOG_KEY: z.string().optional(),
+    PUBLIC_POSTHOG_HOST: z.string().optional(),
 });
 
-// see preInitEnvSchema in vite.config.ts for variables needed to generate AUTO_GENERATED_VITE_MAPKITJS_TOKEN
-const env = envSchema.parse(import.meta.env);
+const response = await fetch('/_kennel/env.json');
+const env = envSchema.parse(await response.json());
 export default env;

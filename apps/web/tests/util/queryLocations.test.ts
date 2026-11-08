@@ -312,19 +312,19 @@ describe('queryLocations.ts', () => {
             isOpen: true,
             now: { day: 4, hour: 23, minute: 25 },
             nextTime: { day: 5, hour: 0, minute: 0 },
-            expectedString: 'Closes in 35 minutes (today at 12:00 AM)', // special regression test for https://github.com/ScottyLabs/cmueats/issues/5
+            expectedString: 'Closes in 35 minutes (today at 12:00 AM)', // Midnight closings once read "Closes in 0 hours"
         },
         {
             isOpen: false,
             now: { day: 0, hour: 10, minute: 28 },
             nextTime: { day: 1, hour: 10, minute: 30 },
-            expectedString: 'Opens in 1 day (tomorrow at 10:30 AM)', // regression test for https://github.com/ScottyLabs/cmueats/issues/31
+            expectedString: 'Opens in 1 day (tomorrow at 10:30 AM)', // Openings over 24 hours away once showed the wrong hour count
         },
         {
             isOpen: false,
             now: { day: 0, hour: 10, minute: 28 },
             nextTime: { day: 1, hour: 17, minute: 0 },
-            expectedString: 'Opens in 1 day (tomorrow at 5:00 PM)', // regression test for https://github.com/ScottyLabs/cmueats/issues/31
+            expectedString: 'Opens in 1 day (tomorrow at 5:00 PM)', // Openings over 24 hours away once showed the wrong hour count
         },
         {
             isOpen: false,

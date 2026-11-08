@@ -1,4 +1,6 @@
+import { readFile } from 'node:fs/promises';
 import { Elysia, t } from 'elysia';
+import { staticPlugin } from '@elysia/static';
 import { cors } from '@elysiajs/cors';
 import { env } from 'env';
 import { notifySlack } from 'utils/slack';
@@ -12,6 +14,8 @@ import { authEndpoints } from 'endpoints/auth';
 import { miscEndpoints } from 'endpoints/misc';
 import { reviewEndpoints } from 'endpoints/reviews';
 Settings.defaultZone = 'America/New_York';
+
+const indexHtml = env.STATIC_DIR === undefined ? undefined : await readFile(`${env.STATIC_DIR}/index.html`, 'utf8');
 
 export const app = new Elysia({ adapter: node() }).use(
     openapi({
@@ -27,9 +31,14 @@ export const app = new Elysia({ adapter: node() }).use(
     }),
 ); // I don't trust bun (as a runtime) enough (Eric Xu - 7/18/2025). This may change in the future, but bun is currently NOT a full drop-in replacement for node and is still rather unstable from personal experience
 
-app.onError(({ error, path, code }) => {
+app.onError(({ error, path, code, request, set }) => {
     if (code === 401) return; // unauthorized
     if (code === 'NOT_FOUND') {
+        const page = request.method === 'GET' && request.headers.get('accept')?.includes('text/html') === true;
+        if (indexHtml !== undefined && page) {
+            set.status = 200;
+            return new Response(indexHtml, { headers: { 'content-type': 'text/html; charset=utf-8' } });
+        }
         console.log(`Someone tried visiting ${path}, which does not exist :P`);
     } else {
         notifySlack(
@@ -41,7 +50,11 @@ app.onError(({ error, path, code }) => {
 });
 
 app.onAfterHandle(({ responseValue }) => {
-    if (typeof responseValue === 'object' && !(responseValue instanceof Response)) {
+    const plain =
+        typeof responseValue === 'object' &&
+        responseValue !== null &&
+        (Array.isArray(responseValue) || Object.getPrototypeOf(responseValue) === Object.prototype);
+    if (plain) {
         // pretty print this JSON response
         return new Response(JSON.stringify(responseValue, null, 4), {
             headers: { 'Content-Type': 'application/json; charset=utf-8' },
@@ -53,6 +66,7 @@ app.use(authEndpoints);
 app.use(deprecatedEndpoints);
 app.use(miscEndpoints);
 app.use(reviewEndpoints);
+if (env.STATIC_DIR !== undefined) app.use(staticPlugin({ assets: env.STATIC_DIR, prefix: '/' }));
 
 if (!env.DEV_DONT_FETCH) {
     setInterval(() => {

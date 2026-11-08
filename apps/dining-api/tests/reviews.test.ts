@@ -12,7 +12,6 @@ import { dbTest } from './dbstub';
 import { createUserSession, DBUser, fetchUserSession } from 'db/auth';
 import { addLocationDataToDb } from 'db/updateLocation';
 import { ILocation } from 'types';
-import { StartedPostgreSqlContainer } from '@testcontainers/postgresql';
 import { DBType } from 'db/db';
 import { Pool } from 'pg';
 const locationIn: ILocation = {
@@ -38,7 +37,6 @@ const locationIn: ILocation = {
 const reviewTest = dbTest.extend<{
     ctx: {
         db: DBType;
-        container: StartedPostgreSqlContainer;
         pool: Pool;
         locationId1: string;
         locationId2: string;
@@ -46,7 +44,7 @@ const reviewTest = dbTest.extend<{
         user2: DBUser;
     };
 }>({
-    ctx: async ({ ctx: { db, container, pool } }, use) => {
+    ctx: async ({ ctx: { db, pool } }, use) => {
         // seed data with test locations, test users, and tags
         const locationId1 = await addLocationDataToDb(db, locationIn);
         const locationId2 = await addLocationDataToDb(db, {
@@ -80,7 +78,7 @@ const reviewTest = dbTest.extend<{
             'Environment',
             'Opening hours',
         ]);
-        use({ db, container, pool, locationId1, locationId2, user1, user2 });
+        await use({ db, pool, locationId1, locationId2, user1, user2 });
     },
 });
 

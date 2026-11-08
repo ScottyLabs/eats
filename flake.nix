@@ -1,116 +1,102 @@
 {
-  description = "CMUEats monorepo (web + dining-api)";
+  description = "CMU Eats monorepo (web + dining-api)";
+
+  nixConfig = {
+    extra-substituters = [ "https://scottylabs.cachix.org" ];
+    extra-trusted-public-keys = [
+      "scottylabs.cachix.org-1:hajjEX5SLi/Y7yYloiXTt2IOr3towcTGRhMh1vu6Tjg="
+    ];
+  };
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    scottylabs = {
-      url = "git+https://git.cmu.dev/ScottyLabs/kennel";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    scottylabs.url = "git+https://git.cmu.dev/ScottyLabs/kennel";
+    nixpkgs.follows = "scottylabs/nixpkgs";
+    flake-parts.follows = "scottylabs/flake-parts";
   };
 
   outputs =
-    { nixpkgs, scottylabs, ... }:
-    let
-      forAllSystems = nixpkgs.lib.genAttrs [
+    inputs:
+    inputs.flake-parts.lib.mkFlake { inherit inputs; } {
+      imports = [ inputs.scottylabs.flakeModules.default ];
+      systems = [
         "x86_64-linux"
         "aarch64-linux"
+        "aarch64-darwin"
       ];
-    in
-    {
-      packages = forAllSystems (
-        system:
-        let
-          pkgs = nixpkgs.legacyPackages.${system};
-          nodejs_24 = pkgs.nodejs_24;
-          buildEnv = (scottylabs.mkLib pkgs).buildEnv;
 
-          pnpmDeps = pkgs.fetchPnpmDeps {
-            pname = "cmueats-monorepo";
-            version = "1.0.0";
-            src = ./.;
-            fetcherVersion = 4;
-            hash = "sha256-lpKN8Y4JQcEh2CFRX4nYq3rVZ0gcV+oYrmpOH64rRgk=";
-            pnpm = pkgs.pnpm_12;
-          };
-
-          mkPnpm =
-            {
-              pname,
-              buildPhase,
-              installPhase,
-              extraEnv ? { },
-            }:
-            pkgs.stdenv.mkDerivation {
-              version = "0.1.0";
-              src = ./.;
-              env = buildEnv // extraEnv;
-              inherit
-                pname
-                pnpmDeps
-                buildPhase
-                installPhase
-                ;
-              nativeBuildInputs = [
-                nodejs_24
-                pkgs.pnpm_12
-                pkgs.pnpmConfigHook
-              ];
-            };
-
-          apiBuildDir = mkPnpm {
-            pname = "api";
-            buildPhase = ''
-              runHook preBuild
-              pnpm build:api
-              runHook postBuild
-            '';
-            installPhase = ''
-              runHook preInstall
-              mkdir -p $out/apps
-              cp -r node_modules $out/node_modules
-              cp package.json pnpm-workspace.yaml pnpm-lock.yaml $out/
-              cp -r apps/dining-api $out/apps/dining-api
-              # drop symlinks to web node_modules, which is linked in root node_modules
-              find $out -xtype l -delete
-              runHook postInstall
-            '';
-          };
-        in
+      perSystem =
         {
-          web = mkPnpm {
-            pname = "web";
-            # Vite only exposes VITE_* variables, but governance gives us
-            # them without the prefix. We rename them here instead
-            extraEnv = {
-              VITE_POSTHOG_KEY = buildEnv.POSTHOG_KEY or "";
-              VITE_POSTHOG_HOST = buildEnv.POSTHOG_HOST or "";
+          pkgs,
+          lib,
+          helpers,
+          ...
+        }:
+        {
+          scottylabs = {
+            project.name = "eats";
+            postgres.enable = true;
+
+            deno = {
+              enable = true;
+              react.enable = true;
             };
-            buildPhase = ''
-              runHook preBuild
-              pnpm build:web
-              runHook postBuild
-            '';
-            installPhase = ''
-              runHook preInstall
-              mkdir -p $out
-              cp -r apps/web/dist/. $out/
-              runHook postInstall
-            '';
+
+            ricochet = {
+              enable = true;
+              appUrl = "http://localhost:5010";
+            };
+
+            processes = {
+              api = {
+                run = "cd apps/dining-api && exec secretspec run -P dev -- deno task dev";
+                ready = "${lib.getExe pkgs.curl} -sf http://localhost:5010/api/health";
+                depends = [ "postgres-setup" ];
+              };
+              web.run = "cd apps/web && deno task dev";
+            };
           };
 
-          # after building, runs migration and then starts the api server
-          api = pkgs.writeShellApplication {
-            name = "api";
-            runtimeInputs = [ nodejs_24 ];
-            text = ''
-              cd ${apiBuildDir}/apps/dining-api
-              node_modules/.bin/drizzle-kit migrate
-              # export NODE_ENV=production
-              exec node dist/server.js
-            '';
+          treefmt.programs.oxfmt.excludes = [
+            "*.json"
+            "**/api.d.ts"
+            "**/api.yaml"
+            "apps/dining-api/tests/html/**"
+            "apps/dining-api/tests/expectedData.ts"
+          ];
+
+          pre-commit.settings.hooks = {
+            block-ai-slop.excludes = [
+              "^apps/dining-api/tests/html/"
+              "^apps/dining-api/tests/expectedData\\.ts$"
+              "^apps/web/src/mockLocations\\.ts$"
+            ];
+
+            deno-test.enable = lib.mkForce false;
+            vitest = {
+              enable = true;
+              name = "vitest";
+              entry = "deno task test";
+              files = "^apps/.*\\.(ts|tsx|css)$";
+              pass_filenames = false;
+              language = "system";
+            };
           };
-        }
-      );
+
+          services.web = {
+            package = helpers.buildDenoTask {
+              src = ./.;
+              cwd = "apps/dining-api";
+              pname = "dining-api";
+              entrypoint = "src/main.ts";
+              compile = true;
+            };
+            customDomain = "cmueats.com";
+            env.STATIC_DIR = "${helpers.buildDenoTask {
+              src = ./.;
+              cwd = "apps/web";
+              pname = "eats-web";
+            }}";
+          };
+        };
     };
 }

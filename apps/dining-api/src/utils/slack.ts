@@ -28,7 +28,8 @@ export async function notifySlack(message: string, slackUrl: string = env.SLACK_
         );
     } catch (error) {
         console.error(
-            `Error sending Slack message "${message.replaceAll('\n', '[newline]')}" to Slack:`,
+            'Error sending Slack message "%s" to Slack:',
+            message.replaceAll('\n', '[newline]'),
             String(error),
         );
         if (error instanceof AxiosError) {

@@ -7,8 +7,7 @@ openapi: 3.1.2
 paths:
   /whoami:
     get:
-      description: If you have an active login session with cmueats, this will return
-        your user info. (this is NOT intended to work cross-site)
+      description: If you have an active login session with cmueats, this will return your user info. (this is NOT intended to work cross-site)
       responses:
         "200":
           description: Response for status 200
@@ -68,8 +67,7 @@ paths:
       operationId: getIndex
   /v2/locations:
     get:
-      description: The times array is guaranteed to be sorted and non-overlapping.
-        Both start and end are inclusive boundaries
+      description: The times array is guaranteed to be sorted and non-overlapping. Both start and end are inclusive boundaries
       responses:
         "200":
           description: Response for status 200
@@ -211,9 +209,7 @@ paths:
       operationId: getEmails
   /api/health:
     get:
-      description: ScottyLabs kennel deployment requires backend services to expose a
-        GET /api/health endpoint that returns HTTP 200 once it is ready to
-        accept traffic
+      description: ScottyLabs kennel deployment requires backend services to expose a GET /api/health endpoint that returns HTTP 200 once it is ready to accept traffic
       responses:
         "200":
           description: Response for status 200
@@ -318,8 +314,7 @@ paths:
                           - 4
                           - 12
                           - 4
-                        description: Count of ratings of star rating
-                          [{.5},{1,1.5},{2,2.5},{3,3.5},{4,4.5},{5}]
+                        description: Count of ratings of star rating [{.5},{1,1.5},{2,2.5},{3,3.5},{4,4.5},{5}]
                         type: array
                         items:
                           type: number

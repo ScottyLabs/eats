@@ -12,15 +12,16 @@ import { locationDataTable, reportsTable } from 'db/schema';
 import { fetchUserDetails } from './auth';
 
 import { sendEmail } from 'utils/email';
+import { signMapkitToken } from 'utils/mapkit';
 
 export const miscEndpoints = new Elysia();
-miscEndpoints.get(
-    '/',
-    () => {
-        return 'ScottyLabs Dining API';
+miscEndpoints.get('/mapkit/token', () => signMapkitToken(), {
+    response: t.String(),
+    detail: {
+        description:
+            'A MapKit JS token for the web frontend, restricted to MAPKIT_ALLOWED_ORIGINS and this deployment',
     },
-    { response: t.String({ examples: ['ScottyLabs Dining API'] }) },
-);
+});
 miscEndpoints.get('/v2/locations', async () => await getAllLocationsFromDB(db, DateTime.now()), {
     response: LocationsSchema,
     detail: {
@@ -132,7 +133,6 @@ miscEndpoints.post(
 async function _sendEmail({ locationName, message }: { locationName: string; message: string }) {
     const received = await sendEmail(
         env.ALERT_EMAIL_SEND,
-        env.ALERT_EMAIL_CC,
         `[CMU Eats] Report for ${locationName}`,
         `${message}\n\nBest,\nCMU Eats automated report system`,
     ).catch(async (error) => {
