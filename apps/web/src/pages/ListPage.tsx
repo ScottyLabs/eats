@@ -86,16 +86,19 @@ function ListBox({
                     />
                 </div>
             </div>
-            <EateryCardGrid
-                locations={sortedLocations}
-                shouldAnimateCards={shouldAnimateCards.current}
-                apiError={error}
-                setSearchQuery={setSearchQuery}
-                updateCardViewPreference={(id, preference) => {
-                    shouldAnimateCards.current = false;
-                    updateCardViewPreference(id, preference);
-                }}
-            />
+            <div style={{ flexGrow: 1 }}>
+                <EateryCardGrid
+                    locations={sortedLocations}
+                    shouldAnimateCards={shouldAnimateCards.current}
+                    apiError={error}
+                    setSearchQuery={setSearchQuery}
+                    updateCardViewPreference={(id, preference) => {
+                        shouldAnimateCards.current = false;
+                        updateCardViewPreference(id, preference);
+                    }}
+                />
+            </div>
+
             <Footer />
         </div>
     );

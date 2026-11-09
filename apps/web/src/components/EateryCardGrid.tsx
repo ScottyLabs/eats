@@ -45,7 +45,7 @@ export default function EateryCardGrid({
     if (locations === undefined) {
         // Display skeleton cards while loading
         return (
-            <div className={css.supergrid__grid}>
+            <div className={css.grid}>
                 {Array(36)
                     .fill(null)
                     .map((_, index) => (
@@ -59,12 +59,7 @@ export default function EateryCardGrid({
         );
     }
 
-    if (locations.length === 0)
-        return (
-            <div className={css.supergrid}>
-                <NoResultsError onClear={() => setSearchQuery('')} />
-            </div>
-        );
+    if (locations.length === 0) return <NoResultsError onClear={() => setSearchQuery('')} />;
 
     function locationToCard(data: ILocation_Full | IMikuCardData) {
         if (data.id === undefined) {
@@ -98,8 +93,8 @@ export default function EateryCardGrid({
     mainCardsWithMikuSongs.push(...mainCards); // rest
 
     return (
-        <div className={css.supergrid}>
-            <div className={css['supergrid__help-text']}>
+        <>
+            <div className={css['help-text']}>
                 <div>
                     <Info size={16} aria-hidden="true" />
                     <span>
@@ -120,14 +115,12 @@ export default function EateryCardGrid({
                     </span>
                 </div>
             </div>
-            <div className={css.supergrid__section}>
-                <div className={css.supergrid__grid}>
-                    <AnimatePresence mode="popLayout">{mainCardsWithMikuSongs.map(locationToCard)}</AnimatePresence>
-                </div>
+            <div className={css.grid}>
+                <AnimatePresence mode="popLayout">{mainCardsWithMikuSongs.map(locationToCard)}</AnimatePresence>
             </div>
 
             {hiddenLocations.length > 0 && (
-                <div className={css.supergrid__section}>
+                <>
                     <button
                         type="button"
                         className={css['hidden-section__toggle']}
@@ -143,7 +136,7 @@ export default function EateryCardGrid({
                     </button>
 
                     <motion.div
-                        className={css['hidden-grid-container']}
+                        className={css['grid-container--hidden']}
                         initial={{
                             height: showHiddenSection ? 'auto' : 0,
                             opacity: showHiddenSection ? 1 : 0,
@@ -157,12 +150,12 @@ export default function EateryCardGrid({
                         transition={{ ease: [0.25, 0.8, 0.25, 1], duration: 0.6 }}
                         aria-hidden={!showHiddenSection}
                     >
-                        <div className={clsx(css.supergrid__grid, css['hidden-grid'])}>
+                        <div className={clsx(css.grid, css['grid--hidden'])}>
                             <AnimatePresence mode="popLayout">{hiddenLocations.map(locationToCard)}</AnimatePresence>
                         </div>
                     </motion.div>
-                </div>
+                </>
             )}
-        </div>
+        </>
     );
 }
