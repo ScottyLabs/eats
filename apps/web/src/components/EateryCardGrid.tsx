@@ -59,7 +59,12 @@ export default function EateryCardGrid({
         );
     }
 
-    if (locations.length === 0) return <NoResultsError onClear={() => setSearchQuery('')} />;
+    if (locations.length === 0)
+        return (
+            <div className={css.supergrid}>
+                <NoResultsError onClear={() => setSearchQuery('')} />
+            </div>
+        );
 
     function locationToCard(data: ILocation_Full | IMikuCardData) {
         if (data.id === undefined) {
