@@ -98,7 +98,6 @@ function ListBox({
                     }}
                 />
             </div>
-
             <Footer />
         </div>
     );
