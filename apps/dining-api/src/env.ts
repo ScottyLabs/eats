@@ -13,9 +13,12 @@ const envSchema = z.object({
     IN_TEST_MODE: z.stringbool().default(false),
     SLACK_MESSAGE_PREFIX: z.string().default('local-dev'),
     DATABASE_URL: z.string(),
-    OIDC_SERVER: z.string().transform((x) => new URL(x)),
+    KEYCLOAK_URL: z.string(),
+    KEYCLOAK_REALM: z.string(),
     OIDC_CLIENT_ID: z.string(),
     OIDC_CLIENT_SECRET: z.string(),
+    OAUTH_RELAY_URL: z.string(),
+    APP_URL: z.string(),
     DEV_DONT_FETCH: z
         .string()
         .transform((x) => x === 'true')
@@ -28,6 +31,11 @@ const envSchema = z.object({
     GOOGLE_REFRESH_TOKEN: z.string(),
     ALERT_EMAIL_SEND: z.string(),
     ALERT_EMAIL_CC: z.string(),
+    MAPKIT_JS_TEAM_ID: z.string(),
+    MAPKIT_JS_KEY_ID: z.string(),
+    MAPKIT_JS_AUTH_KEY: z.string(),
+    MAPKIT_JS_TTL: z.coerce.number().default(31_536_000), // 1 year
+    MAPKIT_ALLOWED_ORIGINS: z.string().default(''),
     // see https://stackoverflow.com/questions/51933601/what-is-the-definitive-way-to-use-gmail-with-oauth-and-nodemailer for how to obtain refresh token
 });
 export const env = envSchema.parse(process.env);

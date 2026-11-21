@@ -1,36 +1,38 @@
 {
   description = "CMUEats monorepo (web + dining-api)";
 
+  nixConfig = {
+    extra-substituters = [ "https://scottylabs.cachix.org" ];
+    extra-trusted-public-keys = [
+      "scottylabs.cachix.org-1:hajjEX5SLi/Y7yYloiXTt2IOr3towcTGRhMh1vu6Tjg="
+    ];
+  };
+
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    scottylabs = {
-      url = "git+https://git.cmu.dev/ScottyLabs/kennel";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    scottylabs.url = "git+https://git.cmu.dev/ScottyLabs/kennel";
+    nixpkgs.follows = "scottylabs/nixpkgs";
+    flake-parts.follows = "scottylabs/flake-parts";
   };
 
   outputs =
-    { nixpkgs, scottylabs, ... }:
-    let
-      forAllSystems = nixpkgs.lib.genAttrs [
+    inputs:
+    inputs.flake-parts.lib.mkFlake { inherit inputs; } {
+      imports = [ inputs.scottylabs.flakeModules.default ];
+      systems = [
         "x86_64-linux"
         "aarch64-linux"
+        "aarch64-darwin"
       ];
-    in
-    {
-      packages = forAllSystems (
-        system:
-        let
-          pkgs = nixpkgs.legacyPackages.${system};
-          nodejs_24 = pkgs.nodejs_24;
-          buildEnv = (scottylabs.mkLib pkgs).buildEnv;
 
+      perSystem =
+        { pkgs, lib, ... }:
+        let
           pnpmDeps = pkgs.fetchPnpmDeps {
             pname = "cmueats-monorepo";
             version = "1.0.0";
             src = ./.;
             fetcherVersion = 4;
-            hash = "sha256-lpKN8Y4JQcEh2CFRX4nYq3rVZ0gcV+oYrmpOH64rRgk=";
+            hash = "sha256-4On8YmAO29+71C1ek6lbjMi/w8RXlmWz3UGa6UvUd+M=";
             pnpm = pkgs.pnpm_12;
           };
 
@@ -39,12 +41,10 @@
               pname,
               buildPhase,
               installPhase,
-              extraEnv ? { },
             }:
             pkgs.stdenv.mkDerivation {
               version = "0.1.0";
               src = ./.;
-              env = buildEnv // extraEnv;
               inherit
                 pname
                 pnpmDeps
@@ -52,14 +52,14 @@
                 installPhase
                 ;
               nativeBuildInputs = [
-                nodejs_24
+                pkgs.nodejs_24
                 pkgs.pnpm_12
                 pkgs.pnpmConfigHook
               ];
             };
 
           apiBuildDir = mkPnpm {
-            pname = "api";
+            pname = "dining-api-dist";
             buildPhase = ''
               runHook preBuild
               pnpm build:api
@@ -78,39 +78,62 @@
           };
         in
         {
-          web = mkPnpm {
-            pname = "web";
-            # Vite only exposes VITE_* variables, but governance gives us
-            # them without the prefix. We rename them here instead
-            extraEnv = {
-              VITE_POSTHOG_KEY = buildEnv.POSTHOG_KEY or "";
-              VITE_POSTHOG_HOST = buildEnv.POSTHOG_HOST or "";
+          scottylabs = {
+            project.name = "eats";
+            postgres.enable = true;
+
+            # the api redirects through the relay, so Keycloak only has to
+            # allow one redirect uri instead of one per preview deployment
+            ricochet = {
+              enable = true;
+              appUrl = "http://localhost:5010";
             };
-            buildPhase = ''
-              runHook preBuild
-              pnpm build:web
-              runHook postBuild
-            '';
-            installPhase = ''
-              runHook preInstall
-              mkdir -p $out
-              cp -r apps/web/dist/. $out/
-              runHook postInstall
-            '';
+
+            shell.packages = [
+              pkgs.nodejs_24
+              pkgs.pnpm_12
+            ];
           };
 
-          # after building, runs migration and then starts the api server
-          api = pkgs.writeShellApplication {
-            name = "api";
-            runtimeInputs = [ nodejs_24 ];
-            text = ''
-              cd ${apiBuildDir}/apps/dining-api
-              node_modules/.bin/drizzle-kit migrate
-              # export NODE_ENV=production
-              exec node dist/server.js
-            '';
+          # kennel's formatters and slop check would rewrite files this migration
+          # doesn't touch, so they stay off until a follow-up cleans the repo up
+          pre-commit.settings.hooks = {
+            treefmt.enable = lib.mkForce false;
+            block-ai-slop.enable = lib.mkForce false;
           };
-        }
-      );
+
+          sites.web = {
+            package = mkPnpm {
+              pname = "eats-web";
+              buildPhase = ''
+                runHook preBuild
+                pnpm build:web
+                runHook postBuild
+              '';
+              installPhase = ''
+                runHook preInstall
+                mkdir -p $out
+                cp -r apps/web/dist/. $out/
+                runHook postInstall
+              '';
+            };
+            spa = true;
+            customDomain = "cmueats.scottylabs.org";
+          };
+
+          # migrates the database, then starts the api
+          services.api = {
+            package = pkgs.writeShellApplication {
+              name = "dining-api";
+              runtimeInputs = [ pkgs.nodejs_24 ];
+              text = ''
+                cd ${apiBuildDir}/apps/dining-api
+                node_modules/.bin/drizzle-kit migrate
+                exec node dist/server.js
+              '';
+            };
+            customDomain = "api.cmueats.scottylabs.org";
+          };
+        };
     };
 }

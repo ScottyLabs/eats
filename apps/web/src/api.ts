@@ -6,12 +6,12 @@ import env from './env';
 import notifySlack from './util/slack';
 import locations from './mockLocations';
 
-const BACKEND_LOCATIONS_URL = env.VITE_API_URL === 'local' ? '/' : env.VITE_API_URL;
+const BACKEND_LOCATIONS_URL = env.PUBLIC_API_URL === 'local' ? '/' : env.PUBLIC_API_URL;
 
 export const fetchClient = createFetchClient<paths>({
     baseUrl: BACKEND_LOCATIONS_URL,
     fetch:
-        env.VITE_API_URL === 'local'
+        env.PUBLIC_API_URL === 'local'
             ? async (req) => {
                   if (!req.url.endsWith('/v2/locations')) return Response.json({}, { status: 404 });
                   return Response.json(locations, { status: 200 });
@@ -30,10 +30,10 @@ export const queryClient = new QueryClient({
 export const $api = createClient(fetchClient);
 /** redirects user to login backend url */
 export const login = () => {
-    window.location.href = `${env.VITE_API_URL}/login?redirectURL=${window.location.origin}`; // not type safe, but we're probably not changing this either
+    window.location.href = `${env.PUBLIC_API_URL}/login?redirectURL=${window.location.origin}`; // not type safe, but we're probably not changing this either
 };
 
 /** redirects user to logout backend url */
 export const logout = () => {
-    window.location.href = `${env.VITE_API_URL}/logout?redirectURL=${window.location.origin}`; // not type safe, but we're probably not changing this either
+    window.location.href = `${env.PUBLIC_API_URL}/logout?redirectURL=${window.location.origin}`; // not type safe, but we're probably not changing this either
 };

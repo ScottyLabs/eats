@@ -7,20 +7,30 @@ import * as client from 'openid-client';
 import { notifySlack } from 'utils/slack';
 import cookieSigner from 'cookie-signature';
 
-const OIDCConfig = await client.discovery(env.OIDC_SERVER, env.OIDC_CLIENT_ID, env.OIDC_CLIENT_SECRET);
+const OIDCConfig = await client.discovery(
+    new URL(`${env.KEYCLOAK_URL}/realms/${env.KEYCLOAK_REALM}`),
+    env.OIDC_CLIENT_ID,
+    env.OIDC_CLIENT_SECRET,
+);
 export const authEndpoints = new Elysia();
 authEndpoints.get(
     '/login',
-    ({ request, cookie, query }) => {
+    async ({ cookie, query }) => {
         const originalOrigin = query.redirectURL;
-        const curOrigin = new URL(request.url);
         if (originalOrigin === null) return new Response(null, { status: 403 });
         cookie['original_origin']!.value = originalOrigin;
+        const state = Buffer.from(
+            JSON.stringify({ return_to: `${env.APP_URL}/code-exchange`, csrf: crypto.randomUUID() }),
+        ).toString('base64url');
+        cookie['oauth_state']!.value = state;
+        const codeVerifier = client.randomPKCECodeVerifier();
+        cookie['pkce_verifier']!.value = codeVerifier;
         const redirectURL = client.buildAuthorizationUrl(OIDCConfig, {
-            redirect_uri: `${curOrigin.origin}/code-exchange`,
+            redirect_uri: env.OAUTH_RELAY_URL,
             scope: 'openid email profile',
-            // prompt: "select_account", // force account picker
-            hd: 'andrew.cmu.edu', // idk if this excludes cmu.edu emails... (most ppl should see the login.cmu.edu screen though)
+            state,
+            code_challenge: await client.calculatePKCECodeChallenge(codeVerifier),
+            code_challenge_method: 'S256',
         });
         return new Response(null, {
             status: 303,
@@ -58,14 +68,23 @@ authEndpoints.get(
     async ({ request, cookie }) => {
         const originalOrigin = cookie['original_origin']!.value as string;
         cookie['original_origin']!.remove();
+        const expectedState = cookie['oauth_state']!.value as string;
+        cookie['oauth_state']!.remove();
+        const pkceCodeVerifier = cookie['pkce_verifier']!.value as string;
+        cookie['pkce_verifier']!.remove();
 
-        const tokens = await client.authorizationCodeGrant(OIDCConfig, new URL(request.url)).catch((e) => {
-            console.error(e);
-            notifySlack(
-                `<!channel> OIDC code exchange failed with error ${e} ${JSON.stringify(e.cause)} CODE: ${e.code}`,
-            );
-            return undefined;
-        });
+        // redirect_uri must match the relay's
+        const callbackURL = new URL(env.OAUTH_RELAY_URL);
+        callbackURL.search = new URL(request.url).search;
+        const tokens = await client
+            .authorizationCodeGrant(OIDCConfig, callbackURL, { expectedState, pkceCodeVerifier })
+            .catch((e) => {
+                console.error(e);
+                notifySlack(
+                    `<!channel> OIDC code exchange failed with error ${e} ${JSON.stringify(e.cause)} CODE: ${e.code}`,
+                );
+                return undefined;
+            });
         if (tokens?.id_token !== undefined) {
             const jwt = jwtDecode(tokens.id_token) as Record<string, string>;
 
@@ -98,7 +117,7 @@ authEndpoints.get(
             },
         });
     },
-    { query: t.Object({ code: t.String() }), detail: { hide: true } },
+    { query: t.Object({ code: t.String(), state: t.String() }), detail: { hide: true } },
 );
 export async function fetchUserDetails(sessionId?: string) {
     if (env.HARDCODE_SESSION_FOR_DEV_TESTING) sessionId = env.HARDCODE_SESSION_FOR_DEV_TESTING;

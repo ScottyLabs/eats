@@ -223,6 +223,9 @@ importers:
       express:
         specifier: ^5.1.0
         version: 5.2.1(supports-color@10.2.2)
+      jsonwebtoken:
+        specifier: ^9.0.3
+        version: 9.0.3
       jwt-decode:
         specifier: ^4.0.0
         version: 4.0.0
@@ -263,6 +266,9 @@ importers:
       '@types/cookie-signature':
         specifier: ^1.1.2
         version: 1.1.2
+      '@types/jsonwebtoken':
+        specifier: ^9.0.10
+        version: 9.0.10
       '@types/luxon':
         specifier: ^3.7.1
         version: 3.7.5

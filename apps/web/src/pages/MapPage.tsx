@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { Map, Marker, ColorScheme, PointOfInterestCategory } from 'mapkit-react';
 import { ILocation_Full } from '../types/locationTypes';
 import { mapMarkerBackgroundColors, mapMarkerTextColors } from '../constants/colors';
@@ -22,7 +23,7 @@ function abbreviate(longName: string) {
  */
 const stripVarFromString = (varString: string) => varString.match(/var\((.+)\)/)?.[1] ?? '';
 
-function MapSection({ locations }: { locations: ILocation_Full[] }) {
+function MapSection({ locations, token }: { locations: ILocation_Full[]; token: string }) {
     const { setDrawerActiveId, closeDrawer, selectedId } = useDrawerAPIContext();
     const cameraBoundary = useMemo(
         () => ({
@@ -46,7 +47,7 @@ function MapSection({ locations }: { locations: ILocation_Full[] }) {
     const derivedRootColors = useMemo(() => window.getComputedStyle(document.body), []);
     return (
         <Map
-            token={env.VITE_AUTO_GENERATED_MAPKITJS_TOKEN}
+            token={token}
             colorScheme={ColorScheme.Dark}
             initialRegion={initialRegion}
             excludedPOICategories={[PointOfInterestCategory.Restaurant]}
@@ -86,12 +87,22 @@ function MapSection({ locations }: { locations: ILocation_Full[] }) {
     );
 }
 function MapPage({ locations }: { locations: ILocation_Full[] | undefined }) {
+    const { data: token } = useQuery({
+        queryKey: ['mapkit-token'],
+        queryFn: async () => {
+            const response = await fetch(`${env.PUBLIC_API_URL}/mapkit/token`);
+            if (!response.ok) throw new Error(`MapKit token request failed with status ${response.status}`);
+            return await response.text();
+        },
+        staleTime: Infinity,
+    });
+
     return (
         <DrawerAPIContextProvider>
             <div className={css['map-page']}>
-                {locations && (
+                {locations && token && (
                     <div className={css['map-page__map-container']}>
-                        <MapSection locations={locations} />
+                        <MapSection locations={locations} token={token} />
                     </div>
                 )}
                 <Drawer locations={locations} />

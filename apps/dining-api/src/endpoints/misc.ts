@@ -12,6 +12,7 @@ import { locationDataTable, reportsTable } from 'db/schema';
 import { fetchUserDetails } from './auth';
 
 import { sendEmail } from 'utils/email';
+import { signMapkitToken } from 'utils/mapkit';
 
 export const miscEndpoints = new Elysia();
 miscEndpoints.get(
@@ -21,6 +22,13 @@ miscEndpoints.get(
     },
     { response: t.String({ examples: ['ScottyLabs Dining API'] }) },
 );
+miscEndpoints.get('/mapkit/token', () => signMapkitToken(), {
+    response: t.String(),
+    detail: {
+        description:
+            'A MapKit JS token for the web frontend, restricted to MAPKIT_ALLOWED_ORIGINS and this deployment',
+    },
+});
 miscEndpoints.get('/v2/locations', async () => await getAllLocationsFromDB(db, DateTime.now()), {
     response: LocationsSchema,
     detail: {
