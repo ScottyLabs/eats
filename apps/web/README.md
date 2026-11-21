@@ -1,4 +1,4 @@
-# CMU Eats
+# CMUEats
 
 <img width="516"  alt="image" src="https://github.com/user-attachments/assets/e9b9b726-223c-4a3d-b46c-b4c6121c52b9" />
 
@@ -8,7 +8,7 @@ Welcome! We're excited to have you join CMU Eats! (alternatively spelled cmueats
 
 ## Developers
 
-1. Join CMU Eats' Slack channel (`#tech-22-cmueats`) in the ScottyLabs Slack. Feel free to also put questions in there.
+1. Join CMUEats' Slack channel (`#tech-22-cmueats`) in the ScottyLabs Slack. Feel free to also put questions in there.
 
 1. [Join the CMU Eats team through governance](https://git.cmu.dev/ScottyLabs/governance#joining-a-team) so you can push branches and read the development secrets.
 
@@ -50,7 +50,7 @@ Individual concept pages are also scraped (ex. <https://web.archive.org/web/2025
 
 ## CSS, the way it was meant to be written™
 
-CMU Eats is in the process of transitioning from CSS-in-JS components to pure CSS. Most class names follow the [BEM](https://csswizardry.com/2013/01/mindbemding-getting-your-head-round-bem-syntax/) (Block, Element, Modifier) convention and strongly limit nested selectors (eg. .block-1 .block-2), but some legacy code may not. (PRs to fix these or remove CSS components are strongly encouraged!)
+CMUEats is in the process of transitioning from CSS-in-JS components to pure CSS. Most class names follow the [BEM](https://csswizardry.com/2013/01/mindbemding-getting-your-head-round-bem-syntax/) (Block, Element, Modifier) convention and strongly limit nested selectors (eg. .block-1 .block-2), but some legacy code may not. (PRs to fix these or remove CSS components are strongly encouraged!)
 
 ![image](https://github.com/user-attachments/assets/6292992f-c599-4203-ae0c-9983599d6bde)
 

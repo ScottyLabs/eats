@@ -1,5 +1,5 @@
 {
-  description = "CMU Eats monorepo (web + dining-api)";
+  description = "CMUEats monorepo (web + dining-api)";
 
   nixConfig = {
     extra-substituters = [ "https://scottylabs.cachix.org" ];
